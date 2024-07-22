@@ -137,7 +137,14 @@
       </ion-grid> -->
     </ion-content>
     <ion-footer>
-      <ion-img src="..src/assets/img/image_2024_07_22T06_08_26_007Z.png"></ion-img>
+      <ion-row class="ion-padding-left">
+        <ion-col>
+      <ion-img class="arlogo" :src="arlogo"></ion-img>
+    </ion-col>
+    <ion-col>
+      <ion-img :src="rsiLogo" class="rsiLogo"></ion-img>
+    </ion-col>
+    </ion-row>
     </ion-footer>
   </ion-page>
 </template>
@@ -161,7 +168,8 @@ import NsImg from "@/assets/img/NSGRAD.jpg";
 import LsImg from "@/assets/img/LSGRAD.jpg";
 import TwImg from "@/assets/img/TWGRAD.jpg";
 import mapConsole from "@/assets/img/Map_Console_Logo.png";
-
+import ArLogo from "@/assets/img/ArLogo.png"
+import RSILogo from "@/assets/img/RSILogo.jpg"
 export default {
   components: {
     IonContent,
@@ -184,6 +192,8 @@ export default {
       lsImg: LsImg,
       twImg: TwImg,
       MapConsole: mapConsole,
+      arlogo:ArLogo,
+      rsiLogo:RSILogo
     };
   },
 };
@@ -216,6 +226,15 @@ object path:hover {
   height: auto;
 }
 
+.arlogo{
+  width: 4rem;
+  height: 3rem;
+  padding-left: 1rem;
+}
+.rsiLogo{
+  width: 12rem;
+  height: 3rem;
+}
 .overlay-text {
   position: absolute;
   top: 85%;
@@ -251,5 +270,8 @@ hr {
 .cardSize{
   max-width:max-content;
   max-height:max-content;
+}
+ion-footer{
+  background-color: #3C457C;
 }
 </style>

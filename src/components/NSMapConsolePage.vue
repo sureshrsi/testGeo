@@ -24,11 +24,14 @@
             <ion-menu-button></ion-menu-button>
           </ion-buttons>
           <ion-buttons slot="start">
-            <ion-back-button default-href="/main" />
+            <ion-back-button default-href="/main" text=""/>
           </ion-buttons>
           <ion-title>
             <ion-img :src="imageSrc"> </ion-img>
           </ion-title>
+          <ion-button slot="end" color="primary" class="iom-padding-right">
+            <ion-icon name="search-outline"></ion-icon>
+          </ion-button>
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
@@ -552,5 +555,9 @@ ion-menu::part(container) {
 .map {
   height: 100%;
   width: 100%;
+}
+
+ion-img {
+  height: 2rem;
 }
 </style>

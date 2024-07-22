@@ -27,8 +27,13 @@
             <ion-img src="../src/assets/img/SOLARISLogo.png"> </ion-img>
           </ion-title>
           <ion-buttons slot="start">
-            <ion-back-button default-href="/main" />
-          </ion-buttons>
+            <ion-back-button default-href="/main" text=""/>
+          </ion-buttons>   
+          <iob-buttons slot="end">
+            <ion-button color="primary" class="iom-padding-right">
+            <ion-icon name="search-outline"></ion-icon>
+          </ion-button>
+          </iob-buttons>         
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
@@ -536,5 +541,9 @@ ion-menu::part(container) {
 .map {
   height: 100%;
   width: 100%;
+}
+
+ion-img {
+  height: 2rem;
 }
 </style>

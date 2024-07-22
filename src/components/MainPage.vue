@@ -36,11 +36,7 @@
           <ion-col>
             <ion-text class="ion-text-justify">
               <h6>
-                Arunachal Pradesh, the largest hilly state of the North Eastern
-                area of India has a geographical area of 83,743 sq.km ranging
-                between 26 o 28’ to 29 o 28’ N and 91 o 35’ to 97 o 27’ E, is
-                bestowed with exclusive physiographic conditions and an ormation
-                in Geo-spatial Context.
+                Arunachal Pradesh Space Applications Centre (APSAC) has developed a remote sensing based field level Soil & Land Resource Information System (SOLARIS) exclusively for the benefit of the farmers of Tawang, Namsai and Lower Subansiri Districts on a Pilot basis, to provide the advisory on Crop Suitability, Site & Crop Specific Nutrient Recommendation and Soil and Water Conservation Measures. This information will be also be useful to the Policy Makers, Planners and Administrators. For more details Click on the following link
               </h6>
             </ion-text>
           </ion-col>
@@ -84,10 +80,10 @@
           </ion-col>
         </ion-row>
       </ion-card>
-      <ion-grid>
+      <!-- <ion-grid>
         <ion-row>
           <ion-col size="3" class="ion-no-padding ion-no-margin">
-            <ion-card>
+            <ion-card class="cardSize">
               <ion-img class="console-image" :src="MapConsole"></ion-img>
               <hr />
               <div class="ion-text-center">
@@ -96,7 +92,7 @@
             </ion-card>
           </ion-col>
           <ion-col size="9" class="ion-no-padding ion-no-margin">
-            <ion-card>
+            <ion-card class="cardSize">
               <ion-row>
                 <ion-col>
                   <ion-text>Tawang</ion-text>
@@ -138,8 +134,11 @@
             </ion-card>
           </ion-col>
         </ion-row>
-      </ion-grid>
+      </ion-grid> -->
     </ion-content>
+    <ion-footer>
+      <ion-img src="..src/assets/img/image_2024_07_22T06_08_26_007Z.png"></ion-img>
+    </ion-footer>
   </ion-page>
 </template>
 <script>
@@ -248,5 +247,9 @@ hr {
   height: 10vh;
   min-height: 5vh;
   min-width: 5vw;
+}
+.cardSize{
+  max-width:max-content;
+  max-height:max-content;
 }
 </style>

@@ -17,9 +17,8 @@
                   ><h4>{{ pageTitle }}</h4></ion-text
                 >
                 <hr />
-
+                <ion-card-content>
                 <ion-select
-                  class="ion-margin-top"
                   interface="popover"
                   label="Select Circle"
                   label-placement="floating"
@@ -35,10 +34,9 @@
                     >{{ circle.cir_name }}</ion-select-option
                   >
                 </ion-select>
-
+              </ion-card-content>
                 <ion-segment
                   v-model="selectedSegment"
-                  color="primary"
                   mode="ios"
                 >
                   <ion-segment-button value="segment1">
@@ -51,7 +49,7 @@
                     <ion-label>Watershed</ion-label>
                   </ion-segment-button>
                 </ion-segment>
-
+                <ion-card-content>
                 <div v-if="selectedSegment === 'segment1'">
                   <ion-select
                     class="ion-margin-top"
@@ -101,8 +99,8 @@
                     >
                   </ion-select>
                 </div>
+                </ion-card-content>
               </ion-card>
-
               <ion-card class="cardSize">
                 <ion-text><h4>Layer Control</h4></ion-text>
                 <ion-card>
@@ -112,6 +110,8 @@
                       <ion-toggle
                         :checked="layer.getVisible()"
                         @ionChange="toggleLayer(layer)"
+                        justify="end"
+                        :enable-on-off-labels="true"
                       >
                       </ion-toggle>
                     </ion-item>
@@ -134,7 +134,7 @@
                   ><h4>{{ pageTitle }}</h4></ion-text
                 >
                 <hr />
-
+<ion-card-content>
                 <ion-select
                   class="ion-margin-top"
                   interface="popover"
@@ -152,10 +152,10 @@
                     >{{ circle.cir_name }}</ion-select-option
                   >
                 </ion-select>
+              </ion-card-content>
 
                 <ion-segment
                   v-model="selectedSegment"
-                  color="primary"
                   mode="ios"
                 >
                   <ion-segment-button value="segment1">
@@ -168,7 +168,7 @@
                     <ion-label>Watershed</ion-label>
                   </ion-segment-button>
                 </ion-segment>
-
+<ion-card-content>
                 <div v-if="selectedSegment === 'segment1'">
                   <ion-select
                     class="ion-margin-top"
@@ -218,8 +218,8 @@
                     >
                   </ion-select>
                 </div>
+              </ion-card-content>
               </ion-card>
-
               <ion-card class="cardSize">
                 <ion-text><h4>Layer Control</h4></ion-text>
                 <ion-card>
@@ -229,6 +229,8 @@
                       <ion-toggle
                         :checked="layer.getVisible()"
                         @ionChange="toggleLayer(layer)"
+                        justify="end"
+                        :enable-on-off-labels="true"
                       >
                       </ion-toggle>
                     </ion-item>
@@ -251,7 +253,7 @@
                   ><h4>{{ pageTitle }}</h4></ion-text
                 >
                 <hr />
-
+<ion-card-content>
                 <ion-select
                   class="ion-margin-top"
                   interface="popover"
@@ -269,10 +271,9 @@
                     >{{ circle.cir_name }}</ion-select-option
                   >
                 </ion-select>
-
+              </ion-card-content>
                 <ion-segment
                   v-model="selectedSegment"
-                  color="primary"
                   mode="ios"
                 >
                   <ion-segment-button value="segment1">
@@ -285,7 +286,7 @@
                     <ion-label>Watershed</ion-label>
                   </ion-segment-button>
                 </ion-segment>
-
+<ion-card-content>
                 <div v-if="selectedSegment === 'segment1'">
                   <ion-select
                     class="ion-margin-top"
@@ -335,6 +336,7 @@
                     >
                   </ion-select>
                 </div>
+              </ion-card-content>
               </ion-card>
 
               <ion-card class="cardSize">
@@ -346,6 +348,8 @@
                       <ion-toggle
                         :checked="layer.getVisible()"
                         @ionChange="toggleLayer(layer)"
+                        justify="end"
+                        :enable-on-off-labels="true"
                       >
                       </ion-toggle>
                     </ion-item>
@@ -361,6 +365,11 @@
               </ion-card>
             </ion-col>
           </ion-row>
+          <ion-row>
+          <ion-text class="textAlign" color="light">
+        About Us|Feedback|Contact Us
+      </ion-text>
+    </ion-row>
         </div>
       </ion-list>
     </ion-content>
@@ -506,12 +515,6 @@ export default {
 };
 </script>
 <style>
-.cardSize {
-  overflow: scroll;
-  padding-top: 1vh;
-  height: 26vh;
-  width: 31vh;
-}
 .bgColor {
   background-color: #3c457c;
 }
@@ -521,10 +524,33 @@ hr {
   border: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
-.segment-button-checked.ios::part(native) {
-  color: #ffffff;
+.segment-button-checked {
+  color: #e6e7ea;
+  /* background-color: #3c457c; */
 }
-ion-segment-button.ios::part(native) {
-  color: #000000;
+ion-segment-button{
+  color: rgb(108, 106, 106);
+}
+/* ion-segment{
+  color:rgb(237, 11, 11);
+} */
+/* ion-img{
+  height:2rem;
+  width:10rem;
+  padding-left: 1rem;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+} */
+ .cardSize{
+  height: 15.6rem;
+  overflow-y: scroll;
+ }
+ion-card{
+  border-radius: 1rem;
+}
+.textAlign{
+  align-items: center;
+  text-align: center;
 }
 </style>

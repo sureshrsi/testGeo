@@ -29,9 +29,10 @@
           <ion-title>
             <ion-img :src="imageSrc"> </ion-img>
           </ion-title>
-          <ion-button slot="end" color="primary" class="iom-padding-right">
-            <ion-icon name="search-outline"></ion-icon>
+          <ion-button slot="end" color="primary" class="iom-padding-right" @click="searchBar">
+            <ion-icon name="search-outline" class="search-icon"></ion-icon>
           </ion-button>
+          <ion-searchbar v-if="showSearchBar" class="search-bar" placeholder="Search..." v-model="showSearchbar1"></ion-searchbar>
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
@@ -69,6 +70,7 @@ import {
   IonTitle,
   IonBackButton,
   IonImg,
+  IonSearchbar
 } from "@ionic/vue";
 import "ol/ol.css";
 import { Map, View } from "ol";
@@ -94,6 +96,8 @@ export default {
       overlay: null,
       featureInfo: null,
       legendUrl: null,
+      showSearchBar:false,
+      showSearchbar1:''
     };
   },
   components: {
@@ -109,13 +113,17 @@ export default {
     SideMenuContent,
     FeatureInfo,
     IonImg,
+    IonSearchbar
   },
   mounted() {
     this.initializeMap();
   },
   methods: {
+    searchBar(){
+      this.showSearchBar=!this.showSearchBar
+    },
     initializeMap() {
-      let base_url = "https://solaris-ar.com:8085/geoserver";
+      const base_url = "https://solaris-ar.com:8085/geoserver";
 
       const baseLayer = new TileLayer({
         title: "OpenStreetMap",
@@ -560,4 +568,19 @@ ion-menu::part(container) {
 ion-img {
   height: 2rem;
 }
+
+/* search-icon{
+  cursor: pointer;
+} */
+
+ .search-bar{
+  /* position:relative; */
+  /* top: 1vh; Adjust as needed
+  left: 1vh; Adjust as needed */
+  /* bottom: 1vh; */
+  /* width: calc(100% - 40px); Adjust as needed */
+  padding-top: 1vh;
+  /* font-size: 16px; */
+  /* border-radius: 4px; */
+ }
 </style>

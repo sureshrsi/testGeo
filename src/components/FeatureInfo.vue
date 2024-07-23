@@ -269,10 +269,18 @@ ion-card{
   overflow-y: scroll;
   overflow-x: scroll;
   /* background-color: #3C457C; */
-  color:#ccc;
+  color:#a1a0a5;
   border-radius: 0.5rem;
 }
 .contentBgColor{
   background-color: #3C457C;
 }
+/* ion-segment {
+    --background: #54dc98;
+    color: #cbc5c5;
+  } */
+ion-segment-button {
+    --indicator-color: #3C457C;
+    color: #9b9b9b ;
+  }
 </style>

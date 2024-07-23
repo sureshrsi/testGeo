@@ -24,11 +24,12 @@
         <ion-row>
           <ion-col>
             <div>
-              <object
+              <!-- <object
                 type="image/svg+xml"
                 :data="svgData"
                 class="svg-content"
-              ></object>
+              ></object> -->
+              <SVG />
             </div>
           </ion-col>
         </ion-row>
@@ -36,7 +37,15 @@
           <ion-col>
             <ion-text class="ion-text-justify">
               <h6>
-                Arunachal Pradesh Space Applications Centre (APSAC) has developed a remote sensing based field level Soil & Land Resource Information System (SOLARIS) exclusively for the benefit of the farmers of Tawang, Namsai and Lower Subansiri Districts on a Pilot basis, to provide the advisory on Crop Suitability, Site & Crop Specific Nutrient Recommendation and Soil and Water Conservation Measures. This information will be also be useful to the Policy Makers, Planners and Administrators. For more details Click on the following link
+                Arunachal Pradesh Space Applications Centre (APSAC) has
+                developed a remote sensing based field level Soil & Land
+                Resource Information System (SOLARIS) exclusively for the
+                benefit of the farmers of Tawang, Namsai and Lower Subansiri
+                Districts on a Pilot basis, to provide the advisory on Crop
+                Suitability, Site & Crop Specific Nutrient Recommendation and
+                Soil and Water Conservation Measures. This information will be
+                also be useful to the Policy Makers, Planners and
+                Administrators. For more details Click on the following link
               </h6>
             </ion-text>
           </ion-col>
@@ -139,12 +148,12 @@
     <ion-footer>
       <ion-row class="ion-padding-left">
         <ion-col>
-      <ion-img class="arlogo" :src="arlogo"></ion-img>
-    </ion-col>
-    <ion-col>
-      <ion-img :src="rsiLogo" class="rsiLogo"></ion-img>
-    </ion-col>
-    </ion-row>
+          <ion-img class="arlogo" :src="arlogo"></ion-img>
+        </ion-col>
+        <ion-col>
+          <ion-img :src="rsiLogo" class="rsiLogo"></ion-img>
+        </ion-col>
+      </ion-row>
     </ion-footer>
   </ion-page>
 </template>
@@ -168,8 +177,11 @@ import NsImg from "@/assets/img/NSGRAD.jpg";
 import LsImg from "@/assets/img/LSGRAD.jpg";
 import TwImg from "@/assets/img/TWGRAD.jpg";
 import mapConsole from "@/assets/img/Map_Console_Logo.png";
-import ArLogo from "@/assets/img/ArLogo.png"
-import RSILogo from "@/assets/img/RSILogo.jpg"
+import ArLogo from "@/assets/img/ArLogo.png";
+import RSILogo from "@/assets/img/RSILogo.jpg";
+
+import SVG from "../components/SVG.vue";
+
 export default {
   components: {
     IonContent,
@@ -183,6 +195,7 @@ export default {
     IonCard,
     IonText,
     IonGrid,
+    SVG,
   },
   data() {
     return {
@@ -192,17 +205,17 @@ export default {
       lsImg: LsImg,
       twImg: TwImg,
       MapConsole: mapConsole,
-      arlogo:ArLogo,
-      rsiLogo:RSILogo
+      arlogo: ArLogo,
+      rsiLogo: RSILogo,
     };
   },
 };
 </script>
 <style scoped>
-.svg-content {
+/* .svg-content {
   width: 95vw;
   height: 22vh;
-}
+} */
 .imgsize {
   display: block;
   width: 48%;
@@ -226,12 +239,12 @@ object path:hover {
   height: auto;
 }
 
-.arlogo{
+.arlogo {
   width: 4rem;
   height: 3rem;
   padding-left: 1rem;
 }
-.rsiLogo{
+.rsiLogo {
   width: 12rem;
   height: 3rem;
 }
@@ -267,11 +280,11 @@ hr {
   min-height: 5vh;
   min-width: 5vw;
 }
-.cardSize{
-  max-width:max-content;
-  max-height:max-content;
+.cardSize {
+  max-width: max-content;
+  max-height: max-content;
 }
-ion-footer{
-  background-color: #3C457C;
+ion-footer {
+  background-color: #3c457c;
 }
 </style>

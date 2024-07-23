@@ -3,14 +3,13 @@
     <ion-content>
       <ion-card>
         <div>
-          <ion-card>
             <ion-row class="ion-text-justify">
-              <ion-col v-for="(value, key) in featureInfo" :key="key">
+              <!-- <ion-col v-for="(value, key) in featureInfo" :key="key">
                 <ion-text v-if="key === 0"
                   ><strong>{{ value }} : </strong></ion-text
                 >
                 <ion-text v-if="key === 1">{{ value }}</ion-text>
-              </ion-col>
+              </ion-col> -->
               <!-- <ion-text>{{featureInfo}}</ion-text> -->
               <!-- <ion-col>
                 <ion-text><strong>Circle : </strong></ion-text>
@@ -27,9 +26,8 @@
                 <ion-text>Tawang</ion-text>
               </ion-col> -->
             </ion-row>
-          </ion-card>
         </div>
-        <ion-segment v-model="selectedSegment" mode="ios">
+        <ion-segment v-model="selectedSegment" mode="ios" :scrollable="true">
           <ion-segment-button value="segment1">
             <ion-label>LULC</ion-label>
           </ion-segment-button>
@@ -256,14 +254,33 @@ export default {
 </script>
 <style scoped>
 .feature-info {
-  position: fixed;
+  position:fixed;
   bottom: 0;
-  width: 100%;
+  width: 95%;
   height: 20vh;
-  overflow-y: auto;
-  background-color: white;
+  overflow-y:scroll;
+  overflow-x:scroll;
+  background-color: rgb(205, 204, 204);
   z-index: 999; /* Ensure it appears above other elements */
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #3C457C;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
+ion-card{
+  overflow-y: scroll;
+  overflow-x: scroll;
+  /* background-color: #3C457C; */
+  color:#a1a0a5;
+  border-radius: 0.5rem;
+}
+.contentBgColor{
+  background-color: #3C457C;
+}
+/* ion-segment {
+    --background: #54dc98;
+    color: #cbc5c5;
+  } */
+ion-segment-button {
+    --indicator-color: #3C457C;
+    color: #9b9b9b ;
+  }
 </style>

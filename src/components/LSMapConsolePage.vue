@@ -33,9 +33,10 @@
           <ion-title>
             <ion-img src="../src/assets/img/SOLARISLogo.png"> </ion-img>
           </ion-title>
-          <ion-button slot="end" color="primary" class="iom-padding-right">
+          <ion-button slot="end" color="primary" class="ion-padding-right">
             <ion-icon name="search-outline"></ion-icon>
           </ion-button>
+          <ion-searchbar v-if="showSearchBar" class="search-bar" placeholder="Search..." v-model="showSearchbar1"></ion-searchbar>  
           <!-- <ion-searchbar v-model="searchOpen"></ion-searchbar> -->
         </ion-toolbar>
       </ion-header>
@@ -138,11 +139,16 @@ export default {
     IonImg,
     IonCol,
     IonRow,
+    showSearchBar:false,
+    showSearchbar1:''
   },
   mounted() {
     this.initializeMap();
   },
   methods: {
+    searchBar(){
+      this.showSearchBar=!this.showSearchBar
+    },
     initializeMap() {
       let base_url = "https://solaris-ar.com:8085/geoserver";
 
@@ -606,4 +612,15 @@ ion-menu::part(container) {
 ion-img {
   height: 2rem;
 }
+
+.search-bar{
+  position: absolute;
+  top: 20px; /* Adjust as needed */
+  left: 20px; /* Adjust as needed */
+  width: calc(100% - 40px); /* Adjust as needed */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+ }
 </style>

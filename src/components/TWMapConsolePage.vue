@@ -30,10 +30,11 @@
             <ion-back-button default-href="/main" text=""/>
           </ion-buttons>   
           <iob-buttons slot="end">
-            <ion-button color="primary" class="iom-padding-right">
+            <ion-button color="primary" class="ion-padding-right" @click="searchBar">
             <ion-icon name="search-outline"></ion-icon>
           </ion-button>
-          </iob-buttons>         
+          </iob-buttons> 
+          <ion-searchbar v-if="showSearchBar" class="search-bar" placeholder="Search..." v-model="showSearchbar1"></ion-searchbar>        
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
@@ -108,13 +109,18 @@ export default {
     SideMenuContent,
     FeatureInfo,
     isFeatureInfoOpen: false, // To control the modal visibility
+    showSearchBar:false,
+    showSearchbar1:''
   },
   mounted() {
     this.initializeMap();
   },
   methods: {
+    searchBar(){
+      this.showSearchBar=!this.showSearchBar
+    },
     initializeMap() {
-      let base_url = "https://solaris-ar.com:8085/geoserver";
+      const base_url = "https://solaris-ar.com:8085/geoserver";
 
       const baseLayer = new TileLayer({
         title: "OpenStreetMap",
@@ -546,4 +552,15 @@ ion-menu::part(container) {
 ion-img {
   height: 2rem;
 }
+
+.search-bar{
+  position: absolute;
+  top: 20px; /* Adjust as needed */
+  left: 20px; /* Adjust as needed */
+  width: calc(100% - 40px); /* Adjust as needed */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+ }
 </style>

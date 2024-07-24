@@ -38,6 +38,7 @@
                 <ion-segment
                   v-model="selectedSegment"
                   mode="ios"
+                  :scrollable="true"
                 >
                   <ion-segment-button value="segment1">
                     <ion-label>Grid No</ion-label>
@@ -157,6 +158,7 @@
                 <ion-segment
                   v-model="selectedSegment"
                   mode="ios"
+                  :scrollable="true"
                 >
                   <ion-segment-button value="segment1">
                     <ion-label>Grid No</ion-label>
@@ -275,6 +277,7 @@
                 <ion-segment
                   v-model="selectedSegment"
                   mode="ios"
+                  :scrollable="true"
                 >
                   <ion-segment-button value="segment1">
                     <ion-label>Grid No</ion-label>

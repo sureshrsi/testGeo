@@ -33,10 +33,10 @@
           <ion-title>
             <ion-img src="../src/assets/img/SOLARISLogo.png"> </ion-img>
           </ion-title>
-          <ion-button slot="end" color="primary" class="ion-padding-right">
+          <ion-button slot="end" color="primary" class="iom-padding-right" @click="searchBar">
             <ion-icon name="search-outline"></ion-icon>
           </ion-button>
-          <ion-searchbar v-if="showSearchBar" class="search-bar" placeholder="Search..." v-model="showSearchbar1"></ion-searchbar>  
+          <ion-searchbar v-if="showSearchBar" show-clear-button="always" color="primary" :clear-icon="trashBin" class="search-bar" placeholder="Search..." v-model="showSearchbar1"></ion-searchbar>   
           <!-- <ion-searchbar v-model="searchOpen"></ion-searchbar> -->
         </ion-toolbar>
       </ion-header>
@@ -114,6 +114,8 @@ export default {
         lat: "Latitude",
         long: "Longitude",
       },
+      showSearchBar:false,
+      showSearchbar1:''
     };
   },
   components: {
@@ -139,8 +141,6 @@ export default {
     IonImg,
     IonCol,
     IonRow,
-    showSearchBar:false,
-    showSearchbar1:''
   },
   mounted() {
     this.initializeMap();
@@ -614,13 +614,20 @@ ion-img {
 }
 
 .search-bar{
-  position: absolute;
-  top: 20px; /* Adjust as needed */
-  left: 20px; /* Adjust as needed */
-  width: calc(100% - 40px); /* Adjust as needed */
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  /* position:absolute; */
+  top:0.5rem; /*Adjust as needed
+  left: 1vh; Adjust as needed */
+  /* bottom: 1vh; */
+  width:100%;  /*Adjust as needed
+  padding-top: 1vh;
+  /* font-size: 16px; */
+  height: 3rem;
+  border-radius: 1rem;
+  left: 0rem;
+  z-index:99999;
+  display: flex;
+  align-items: center;
+  flex-grow: 8;
+  margin-left: 5px;
  }
 </style>

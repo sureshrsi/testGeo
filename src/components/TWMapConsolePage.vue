@@ -566,7 +566,7 @@ export default {
               .then((data) => {
                 if (data.features && data.features.length > 0) {
                   const feature = data.features[0];
-                  this.featureInfo = feature.properties;
+                  // this.featureInfo = feature.properties;
                   this.isFeatureInfoOpen = true;
                 } else {
                   this.featureInfo = null;

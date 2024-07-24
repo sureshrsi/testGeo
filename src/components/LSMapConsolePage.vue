@@ -606,9 +606,9 @@ export default {
                               k
                             );
                             if (key == k) {
-                              this.featureInfo = latLongData.push(
-                                data.features[index].properties[k]
-                              );
+                              // this.featureInfo = latLongData.push(
+                              //   data.features[index].properties[k]
+                              // );
                               console.log(
                                 "********************************",
                                 latLongData
@@ -618,7 +618,7 @@ export default {
                         );
                       }
                     }
-                    this.featureInfo = latLongData;
+                    // this.featureInfo = latLongData;
                   }
                   this.isFeatureInfoOpen = true;
                 } else {

@@ -36,7 +36,12 @@
           <ion-button slot="end" color="primary" class="ion-padding-right">
             <ion-icon name="search-outline"></ion-icon>
           </ion-button>
-          <ion-searchbar v-if="showSearchBar" class="search-bar" placeholder="Search..." v-model="showSearchbar1"></ion-searchbar>  
+          <ion-searchbar
+            v-if="showSearchBar"
+            class="search-bar"
+            placeholder="Search..."
+            v-model="showSearchbar1"
+          ></ion-searchbar>
           <!-- <ion-searchbar v-model="searchOpen"></ion-searchbar> -->
         </ion-toolbar>
       </ion-header>
@@ -60,6 +65,11 @@
       <ion-footer>
         <FeatureInfo
           :featureInfo="featureInfo"
+          :heomInfo="heomInfo"
+          :slopeInfo="slopeInfo"
+          :soilInfo="soilInfo"
+          :cropsInfo="cropsInfo"
+          :actionPlanInfo="actionPlanInfo"
           @update:isOpen="isFeatureInfoOpen = $event"
         />
       </ion-footer>
@@ -109,11 +119,45 @@ export default {
       map: null,
       overlay: null,
       featureInfo: [],
+      heomInfo: [],
+      slopeInfo: [],
+      soilInfo: [],
+      cropsInfo: [],
+      actionPlanInfo: [],
       legendUrl: null,
       popup_labels: {
         lat: "Latitude",
         long: "Longitude",
       },
+      coordinate: "",
+      hgeom_lables: {
+        gw_prospec: "Ground Water Prospects",
+        lithology: "Lithology",
+        geom_unit: " Geom Unit",
+      },
+      soil_lables: {
+        mapping_un: "Mapping Unit",
+        classifica: "Soil Class",
+        descriptio: "Soil Description",
+      },
+      lulc_lables: {
+        lulc: "Land Use Land Cover",
+        area_lulc: "Area (Ha)",
+      },
+      slope_lables: {
+        slope_perc: "Slope Percentage",
+        slope_desc: "Slope Description",
+      },
+
+      ld_labels: { map_unit_d: "Map Unit Description" },
+      lc_labels: { land_capab: "Land Capability" },
+      li_labels: { land_irrig: "Land Irrigability" },
+      cs_labels: {
+        s1: "Highly Suitable Crops (S1)",
+        s2: "Moderately Suitable Crops (S2)",
+        s3: "Marginally Suitable Crops (S3)",
+      },
+      ap_labels: { action_pla: "Action Plan for Resources Development" },
     };
   },
   components: {
@@ -139,15 +183,15 @@ export default {
     IonImg,
     IonCol,
     IonRow,
-    showSearchBar:false,
-    showSearchbar1:''
+    showSearchBar: false,
+    showSearchbar1: "",
   },
   mounted() {
     this.initializeMap();
   },
   methods: {
-    searchBar(){
-      this.showSearchBar=!this.showSearchBar
+    searchBar() {
+      this.showSearchBar = !this.showSearchBar;
     },
     initializeMap() {
       let base_url = "https://solaris-ar.com:8085/geoserver";
@@ -515,6 +559,12 @@ export default {
       }
     },
     getTopMostMapClick(event) {
+      this.getLulcData(event);
+      this.getHGOMData(event);
+      this.getSlopeData(event);
+      this.getSoilData(event);
+      this.getCropsData(event);
+      this.getActionPlanData(event);
       const view = this.map.getView();
       const viewResolution = view.getResolution();
       const projection = view.getProjection();
@@ -584,6 +634,364 @@ export default {
         }
       }
     },
+    getLulcData(event) {
+      this.featureInfo = [];
+      const view = this.map.getView();
+      const viewResolution = view.getResolution();
+      const projection = view.getProjection();
+      this.coordinate = event.coordinate;
+      const lulc_url = this.layers[10]
+        .getSource()
+        .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
+          INFO_FORMAT: "application/json",
+        });
+      if (lulc_url) {
+        // console.log("top most url", url);
+        fetch(lulc_url)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.features && data.features.length > 0) {
+              for (let index = 0; index < data.features.length; index++) {
+                for (const k in data.features[index].properties) {
+                  if (Object.hasOwn(data.features[index].properties, k)) {
+                    Object.entries(this.lulc_lables).forEach(([key, value]) => {
+                      if (key === k) {
+                        console.log(
+                          "%%%%%%%%%%%%",
+                          value,
+                          "&&&&&&&&&&&&&&",
+                          data.features[index].properties[k]
+                        );
+                        this.featureInfo.push(
+                          value + " : " + data.features[index].properties[k]
+                        );
+                        console.log(
+                          "%%%%%%%%%%%%%%%%%#@@#@#@@@#%%%%%%%%%%%%%%%%%%%%%",
+                          this.featureInfo
+                        );
+                      }
+                    });
+                  }
+                }
+              }
+              // const feature = data.features[0];
+              // this.featureInfo = feature.properties;
+              // console.log("@@@@@@@@@@@!!!!!!!!!!@@@@@@@@@@", this.featureInfo);
+              // console.log(
+              //   "@@@@@@@@@@@@ Layers @@@@@@@@@",
+              //   this.map.getLayers()
+              // );
+              this.isFeatureInfoOpen = true;
+            } else {
+              this.featureInfo = null;
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching feature info:", error);
+            this.featureInfo = null;
+          });
+        // Stop after the first visible layer with feature info
+      }
+    },
+    getHGOMData(event) {
+      this.heomInfo = [];
+      const view = this.map.getView();
+      const viewResolution = view.getResolution();
+      const projection = view.getProjection();
+      this.coordinate = event.coordinate;
+      const heom_url = this.layers[7]
+        .getSource()
+        .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
+          INFO_FORMAT: "application/json",
+        });
+      if (heom_url) {
+        // console.log("top most url", url);
+        fetch(heom_url)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.features && data.features.length > 0) {
+              for (let index = 0; index < data.features.length; index++) {
+                for (const k in data.features[index].properties) {
+                  if (Object.hasOwn(data.features[index].properties, k)) {
+                    Object.entries(this.hgeom_lables).forEach(
+                      ([key, value]) => {
+                        if (key === k) {
+                          console.log(
+                            "%%%%%%%%%%%%",
+                            value,
+                            "&&&&&&&&&&&&&&",
+                            data.features[index].properties[k]
+                          );
+                          this.heomInfo.push(
+                            value + " : " + data.features[index].properties[k]
+                          );
+                          console.log(
+                            "%%%%%%%%%%%%%%%%%#@@#@#@@@#%%%%%%%%%%%%%%%%%%%%%",
+                            this.featureInfo
+                          );
+                        }
+                      }
+                    );
+                  }
+                }
+              }
+              // const feature = data.features[0];
+              // this.featureInfo = feature.properties;
+              // console.log("@@@@@@@@@@@!!!!!!!!!!@@@@@@@@@@", this.featureInfo);
+              // console.log(
+              //   "@@@@@@@@@@@@ Layers @@@@@@@@@",
+              //   this.map.getLayers()
+              // );
+              this.isFeatureInfoOpen = true;
+            } else {
+              this.featureInfo = null;
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching feature info:", error);
+            this.featureInfo = null;
+          });
+        // Stop after the first visible layer with feature info
+      }
+    },
+    getSlopeData(event) {
+      this.slopeInfo = [];
+      const view = this.map.getView();
+      const viewResolution = view.getResolution();
+      const projection = view.getProjection();
+      this.coordinate = event.coordinate;
+      const slop_url = this.layers[9]
+        .getSource()
+        .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
+          INFO_FORMAT: "application/json",
+        });
+      if (slop_url) {
+        // console.log("top most url", url);
+        fetch(slop_url)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.features && data.features.length > 0) {
+              for (let index = 0; index < data.features.length; index++) {
+                for (const k in data.features[index].properties) {
+                  if (Object.hasOwn(data.features[index].properties, k)) {
+                    Object.entries(this.slope_lables).forEach(
+                      ([key, value]) => {
+                        if (key === k) {
+                          console.log(
+                            "%%%%%%%%%%%%",
+                            value,
+                            "&&&&&&&&&&&&&&",
+                            data.features[index].properties[k]
+                          );
+                          this.slopeInfo.push(
+                            value + " : " + data.features[index].properties[k]
+                          );
+                          console.log(
+                            "%%%%%%%%%%%%%%%%%#@@#@#@@@#%%%%%%%%%%%%%%%%%%%%%",
+                            this.featureInfo
+                          );
+                        }
+                      }
+                    );
+                  }
+                }
+              }
+              // const feature = data.features[0];
+              // this.featureInfo = feature.properties;
+              // console.log("@@@@@@@@@@@!!!!!!!!!!@@@@@@@@@@", this.featureInfo);
+              // console.log(
+              //   "@@@@@@@@@@@@ Layers @@@@@@@@@",
+              //   this.map.getLayers()
+              // );
+              this.isFeatureInfoOpen = true;
+            } else {
+              this.featureInfo = null;
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching feature info:", error);
+            this.featureInfo = null;
+          });
+        // Stop after the first visible layer with feature info
+      }
+    },
+    getSoilData(event) {
+      this.cropsInfo = [];
+      const view = this.map.getView();
+      const viewResolution = view.getResolution();
+      const projection = view.getProjection();
+      this.coordinate = event.coordinate;
+      const soil_url = this.layers[6]
+        .getSource()
+        .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
+          INFO_FORMAT: "application/json",
+        });
+      if (soil_url) {
+        // console.log("top most url", url);
+        fetch(soil_url)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.features && data.features.length > 0) {
+              for (let index = 0; index < data.features.length; index++) {
+                for (const k in data.features[index].properties) {
+                  if (Object.hasOwn(data.features[index].properties, k)) {
+                    Object.entries(this.soil_lables).forEach(([key, value]) => {
+                      if (key === k) {
+                        console.log(
+                          "%%%%%%%%%%%%",
+                          value,
+                          "&&&&&&&&&&&&&&",
+                          data.features[index].properties[k]
+                        );
+                        this.soilInfo.push(
+                          value + " : " + data.features[index].properties[k]
+                        );
+                        console.log(
+                          "%%%%%%%%%%%%%%%%%#@@#@#@@@#%%%%%%%%%%%%%%%%%%%%%",
+                          this.featureInfo
+                        );
+                      }
+                    });
+                  }
+                }
+              }
+              // const feature = data.features[0];
+              // this.featureInfo = feature.properties;
+              // console.log("@@@@@@@@@@@!!!!!!!!!!@@@@@@@@@@", this.featureInfo);
+              // console.log(
+              //   "@@@@@@@@@@@@ Layers @@@@@@@@@",
+              //   this.map.getLayers()
+              // );
+              this.isFeatureInfoOpen = true;
+            } else {
+              this.featureInfo = null;
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching feature info:", error);
+            this.featureInfo = null;
+          });
+        // Stop after the first visible layer with feature info
+      }
+    },
+    getCropsData(event) {
+      this.cropsInfo = [];
+      const view = this.map.getView();
+      const viewResolution = view.getResolution();
+      const projection = view.getProjection();
+      this.coordinate = event.coordinate;
+      const crops_url = this.layers[3]
+        .getSource()
+        .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
+          INFO_FORMAT: "application/json",
+        });
+      if (crops_url) {
+        // console.log("top most url", url);
+        fetch(crops_url)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.features && data.features.length > 0) {
+              for (let index = 0; index < data.features.length; index++) {
+                for (const k in data.features[index].properties) {
+                  if (Object.hasOwn(data.features[index].properties, k)) {
+                    Object.entries(this.cs_labels).forEach(([key, value]) => {
+                      if (key === k) {
+                        console.log(
+                          "%%%%%%%%%%%%",
+                          value,
+                          "&&&&&&&&&&&&&&",
+                          data.features[index].properties[k]
+                        );
+                        this.cropsInfo.push(
+                          value + " : " + data.features[index].properties[k]
+                        );
+                        console.log(
+                          "%%%%%%%%%%%%%%%%%#@@#@#@@@#%%%%%%%%%%%%%%%%%%%%%",
+                          this.featureInfo
+                        );
+                      }
+                    });
+                  }
+                }
+              }
+              // const feature = data.features[0];
+              // this.featureInfo = feature.properties;
+              // console.log("@@@@@@@@@@@!!!!!!!!!!@@@@@@@@@@", this.featureInfo);
+              // console.log(
+              //   "@@@@@@@@@@@@ Layers @@@@@@@@@",
+              //   this.map.getLayers()
+              // );
+              this.isFeatureInfoOpen = true;
+            } else {
+              this.featureInfo = null;
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching feature info:", error);
+            this.featureInfo = null;
+          });
+        // Stop after the first visible layer with feature info
+      }
+    },
+    getActionPlanData(event) {
+      this.actionPlanInfo = [];
+      const view = this.map.getView();
+      const viewResolution = view.getResolution();
+      const projection = view.getProjection();
+      this.coordinate = event.coordinate;
+      const action_url = this.layers[2]
+        .getSource()
+        .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
+          INFO_FORMAT: "application/json",
+        });
+      if (action_url) {
+        // console.log("top most url", url);
+        fetch(action_url)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.features && data.features.length > 0) {
+              for (let index = 0; index < data.features.length; index++) {
+                for (const k in data.features[index].properties) {
+                  if (Object.hasOwn(data.features[index].properties, k)) {
+                    Object.entries(this.ap_labels).forEach(([key, value]) => {
+                      if (key === k) {
+                        console.log(
+                          "%%%%%%%%%%%%",
+                          value,
+                          "&&&&&&&&&&&&&&",
+                          data.features[index].properties[k]
+                        );
+                        this.actionPlanInfo.push(
+                          value + " : " + data.features[index].properties[k]
+                        );
+                        console.log(
+                          "%%%%%%%%%%%%%%%%%#@@#@#@@@#%%%%%%%%%%%%%%%%%%%%%",
+                          this.featureInfo
+                        );
+                      }
+                    });
+                  }
+                }
+              }
+              // const feature = data.features[0];
+              // this.featureInfo = feature.properties;
+              // console.log("@@@@@@@@@@@!!!!!!!!!!@@@@@@@@@@", this.featureInfo);
+              // console.log(
+              //   "@@@@@@@@@@@@ Layers @@@@@@@@@",
+              //   this.map.getLayers()
+              // );
+              this.isFeatureInfoOpen = true;
+            } else {
+              this.featureInfo = null;
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching feature info:", error);
+            this.featureInfo = null;
+          });
+        // Stop after the first visible layer with feature info
+      }
+    },
   },
   watch: {
     // Watch for changes in layer visibility to update the legend
@@ -613,7 +1021,7 @@ ion-img {
   height: 2rem;
 }
 
-.search-bar{
+.search-bar {
   position: absolute;
   top: 20px; /* Adjust as needed */
   left: 20px; /* Adjust as needed */
@@ -622,5 +1030,5 @@ ion-img {
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
- }
+}
 </style>

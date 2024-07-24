@@ -2,31 +2,6 @@
   <div v-if="featureInfo" class="feature-info">
     <ion-content>
       <ion-card>
-        <div>
-            <ion-row class="ion-text-justify">
-              <!-- <ion-col v-for="(value, key) in featureInfo" :key="key">
-                <ion-text v-if="key === 0"
-                  ><strong>{{ value }} : </strong></ion-text
-                >
-                <ion-text v-if="key === 1">{{ value }}</ion-text>
-              </ion-col> -->
-              <!-- <ion-text>{{featureInfo}}</ion-text> -->
-              <!-- <ion-col>
-                <ion-text><strong>Circle : </strong></ion-text>
-                <ion-text>Mukto</ion-text>
-              </ion-col>
-              </ion-row>
-              <ion-row class="ion-text-justify">
-                <ion-col>
-                <ion-text><strong>Longitude : </strong></ion-text>
-                <ion-text>15648956654</ion-text>
-              </ion-col>
-              <ion-col>
-                <ion-text><strong>District : </strong></ion-text>
-                <ion-text>Tawang</ion-text>
-              </ion-col> -->
-            </ion-row>
-        </div>
         <ion-segment v-model="selectedSegment" mode="ios" :scrollable="true">
           <ion-segment-button value="segment1">
             <ion-label>LULC</ion-label>
@@ -50,7 +25,20 @@
         <div v-if="selectedSegment === 'segment1'">
           <ion-card>
             <ion-row>
-              <ion-col>
+              <ion-list>
+                <ion-item v-for="(value, key) in featureInfo" :key="key">
+                  {{ value }}
+                </ion-item>
+              </ion-list>
+              <!-- <ion-col v-for="(value, key) in featureInfo" :key="key">
+                <ion-text
+                  ><strong>{{ key }} </strong></ion-text
+                ><br />
+                <ion-text
+                  ><strong> {{ value }} </strong></ion-text
+                >
+              </ion-col> -->
+              <!-- <ion-col>
                 <ion-text><strong>Land use Land Cover : </strong></ion-text>
               </ion-col>
               <ion-col>
@@ -63,7 +51,7 @@
               </ion-col>
               <ion-col>
                 <ion-text>15614561</ion-text>
-              </ion-col>
+              </ion-col> -->
             </ion-row>
           </ion-card>
         </div>
@@ -71,7 +59,12 @@
         <div v-if="selectedSegment === 'segment2'">
           <ion-card>
             <ion-row>
-              <ion-col>
+              <ion-list>
+                <ion-item v-for="(value, key) in heomInfo" :key="key">
+                  {{ value }}
+                </ion-item>
+              </ion-list>
+              <!-- <ion-col>
                 <ion-text><strong>Geom Unit : </strong></ion-text>
               </ion-col>
               <ion-col>
@@ -90,14 +83,19 @@
               </ion-col>
               <ion-col>
                 <ion-text>Poor to Moderate</ion-text>
-              </ion-col>
+              </ion-col> -->
             </ion-row>
           </ion-card>
         </div>
         <div v-if="selectedSegment === 'segment3'">
           <ion-card>
             <ion-row>
-              <ion-col>
+              <ion-list>
+                <ion-item v-for="(value, key) in slopeInfo" :key="key">
+                  {{ value }}
+                </ion-item>
+              </ion-list>
+              <!-- <ion-col>
                 <ion-text><strong>Slope Percentage : </strong></ion-text>
               </ion-col>
               <ion-col>
@@ -110,14 +108,19 @@
               </ion-col>
               <ion-col>
                 <ion-text>Moderately Sloping</ion-text>
-              </ion-col>
+              </ion-col> -->
             </ion-row>
           </ion-card>
         </div>
         <div v-if="selectedSegment === 'segment4'">
           <ion-card>
             <ion-row>
-              <ion-col>
+              <ion-list>
+                <ion-item v-for="(value, key) in soilInfo" :key="key">
+                  {{ value }}
+                </ion-item>
+              </ion-list>
+              <!-- <ion-col>
                 <ion-text><strong>Mapping Unit : </strong></ion-text>
               </ion-col>
               <ion-col>
@@ -141,14 +144,19 @@
               </ion-col>
               <ion-col>
                 <ion-text>Fine Loamy Eutric Humicyepts</ion-text>
-              </ion-col>
+              </ion-col> -->
             </ion-row>
           </ion-card>
         </div>
         <div v-if="selectedSegment === 'segment5'">
           <ion-card>
             <ion-row>
-              <ion-col>
+              <ion-list>
+                <ion-item v-for="(value, key) in cropsInfo" :key="key">
+                  {{ value }}
+                </ion-item>
+              </ion-list>
+              <!-- <ion-col>
                 <ion-text
                   ><strong>Highly Suitable Crops(s1): </strong></ion-text
                 >
@@ -175,14 +183,19 @@
               </ion-col>
               <ion-col>
                 <ion-text>Paddy,Kiwi</ion-text>
-              </ion-col>
+              </ion-col> -->
             </ion-row>
           </ion-card>
         </div>
         <div v-if="selectedSegment === 'segment6'">
           <ion-card>
             <ion-row class="ion-padding">
-              <ion-text
+              <ion-list>
+                <ion-item v-for="(value, key) in actionPlanInfo" :key="key">
+                  {{ value }}
+                </ion-item>
+              </ion-list>
+              <!-- <ion-text
                 ><strong
                   >Action Plan for Resources Development :
                 </strong></ion-text
@@ -193,7 +206,7 @@
                 >Construction of run off disposal channels in the cultivated
                 land; application of 8.00 tonnes/ha of lime and application of
                 N, K, Cu, B & Mo</ion-text
-              >
+              > -->
             </ion-row>
           </ion-card>
         </div>
@@ -216,10 +229,17 @@ import {
   IonText,
   IonButton,
   IonButtons,
+  IonList,
+  IonItem,
 } from "@ionic/vue";
 export default {
   props: {
-    featureInfo: [],
+    featureInfo: Object,
+    heomInfo: Object,
+    slopeInfo: Object,
+    soilInfo: Object,
+    cropsInfo: Object,
+    actionPlanInfo: Object,
     isOpen: Boolean,
   },
   data() {
@@ -238,6 +258,8 @@ export default {
     IonText,
     IonCard,
     IonCardContent,
+    IonList,
+    IonItem,
   },
   created() {
     this.print();
@@ -254,33 +276,33 @@ export default {
 </script>
 <style scoped>
 .feature-info {
-  position:fixed;
+  position: fixed;
   bottom: 0;
   width: 95%;
   height: 20vh;
-  overflow-y:scroll;
-  overflow-x:scroll;
+  overflow-y: scroll;
+  overflow-x: scroll;
   background-color: rgb(205, 204, 204);
   z-index: 999; /* Ensure it appears above other elements */
-  border-top: 1px solid #3C457C;
+  border-top: 1px solid #3c457c;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
-ion-card{
+ion-card {
   overflow-y: scroll;
   overflow-x: scroll;
   /* background-color: #3C457C; */
-  color:#a1a0a5;
+  color: #a1a0a5;
   border-radius: 0.5rem;
 }
-.contentBgColor{
-  background-color: #3C457C;
+.contentBgColor {
+  background-color: #3c457c;
 }
 /* ion-segment {
     --background: #54dc98;
     color: #cbc5c5;
   } */
 ion-segment-button {
-    --indicator-color: #3C457C;
-    color: #9b9b9b ;
-  }
+  --indicator-color: #3c457c;
+  color: #9b9b9b;
+}
 </style>

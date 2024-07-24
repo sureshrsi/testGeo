@@ -9,8 +9,8 @@
       xmlns="http://www.w3.org/2000/svg"
       version="1.2"
       baseProfile="tiny"
-      width="300"
-      height="250"
+      width="270"
+      height="200"
       viewBox="0 0 800 429"
       stroke-linecap="round"
       stroke-linejoin="round"
@@ -302,6 +302,8 @@ export default {
 <style scoped>
 .svg-container {
   position: relative;
+  margin: 0;
+  padding: 0;
 }
 
 .district-name {

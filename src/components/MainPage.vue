@@ -9,28 +9,29 @@
           <ion-col>
             <div class="ion-text-center">
               <ion-text>
-                <h1>SOIL AND LAND RESOURCE INFORMATION SYSTEM</h1>
+                <h4>SOIL AND LAND RESOURCE INFORMATION SYSTEM</h4>
               </ion-text>
               <ion-text>
-                <h3>
+                <h5>
                   Natural Resources Inventory for Micro-Level Agricultural
                   Planning (NRIMAP)
-                </h3>
+                </h5>
               </ion-text>
             </div>
           </ion-col>
         </ion-row>
 
-        <ion-row>
+        <ion-row style="text-align: center">
           <ion-col>
-            <div>
-              <!-- <object
+            <SVG />
+            <!-- <div> -->
+            <!-- <object
                 type="image/svg+xml"
                 :data="svgData"
                 class="svg-content"
               ></object> -->
-              <SVG />
-            </div>
+
+            <!-- </div> -->
           </ion-col>
         </ion-row>
         <ion-row>

@@ -27,22 +27,12 @@
             <ion-back-button default-href="/main" text="" />
           </ion-buttons>
           <ion-title>
-            <ion-img :src="imageSrc"> </ion-img>
+            <ion-img :src="imageSrc" class="imgPadding"> </ion-img>
           </ion-title>
-          <ion-button
-            slot="end"
-            color="primary"
-            class="iom-padding-right"
-            @click="searchBar"
-          >
-            <ion-icon name="search-outline" class="search-icon"></ion-icon>
+          <ion-button slot="end" color="primary" class="iom-padding-right" @click="searchBar">
+            <ion-icon name="search-outline"></ion-icon>
           </ion-button>
-          <ion-searchbar
-            v-if="showSearchBar"
-            class="search-bar"
-            placeholder="Search..."
-            v-model="showSearchbar1"
-          ></ion-searchbar>
+          <ion-searchbar v-if="showSearchBar" show-clear-button="always" color="primary" :clear-icon="trashBin" class="search-bar" placeholder="Search..." v-model="showSearchbar1"></ion-searchbar>
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
@@ -86,6 +76,7 @@ import {
   IonBackButton,
   IonImg,
   IonSearchbar,
+  IonIcon
 } from "@ionic/vue";
 import "ol/ol.css";
 import { Map, View } from "ol";
@@ -168,6 +159,7 @@ export default {
     FeatureInfo,
     IonImg,
     IonSearchbar,
+    IonIcon
   },
   mounted() {
     this.initializeMap();
@@ -991,14 +983,21 @@ ion-img {
   cursor: pointer;
 } */
 
-.search-bar {
-  /* position:relative; */
-  /* top: 1vh; Adjust as needed
+ .search-bar{
+  /* position:absolute; */
+  top:0.5rem; /*Adjust as needed
   left: 1vh; Adjust as needed */
   /* bottom: 1vh; */
-  /* width: calc(100% - 40px); Adjust as needed */
+  width:100%;  /*Adjust as needed
   padding-top: 1vh;
   /* font-size: 16px; */
-  /* border-radius: 4px; */
-}
+  height: 3rem;
+  border-radius: 1rem;
+  left: 0rem;
+  z-index:99999;
+  display: flex;
+  align-items: center;
+  flex-grow: 8;
+  margin-left: 5px;
+ }
 </style>

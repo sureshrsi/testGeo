@@ -275,8 +275,8 @@ export default {
   padding-left: 0%;
   position: absolute;
   bottom: 0;
-  width:92%;
-  height: 30vh;
+  min-width:95%;
+  height: 30%;
   overflow-y: scroll;
   background-color: rgb(205, 204, 204);
   z-index: 999; /* Ensure it appears above other elements */

@@ -1,8 +1,10 @@
 <template>
   <div v-if="featureInfo" class="feature-info">
     <ion-content>
-      <ion-card>
-        <ion-segment v-model="selectedSegment" mode="ios" :scrollable="true">
+      <div>
+      <ion-grid>
+        <ion-row>
+          <ion-segment v-model="selectedSegment" mode="ios" :scrollable="true" :swipe-gesture="true">
           <ion-segment-button value="segment1">
             <ion-label>LULC</ion-label>
           </ion-segment-button>
@@ -22,8 +24,10 @@
             <ion-label>APLAN</ion-label>
           </ion-segment-button>
         </ion-segment>
+        </ion-row>
+      </ion-grid>
+    </div>
         <div v-if="selectedSegment === 'segment1'">
-          <ion-card>
             <ion-row>
               <ion-list>
                 <ion-item v-for="(value, key) in featureInfo" :key="key">
@@ -53,11 +57,9 @@
                 <ion-text>15614561</ion-text>
               </ion-col> -->
             </ion-row>
-          </ion-card>
         </div>
 
         <div v-if="selectedSegment === 'segment2'">
-          <ion-card>
             <ion-row>
               <ion-list>
                 <ion-item v-for="(value, key) in heomInfo" :key="key">
@@ -85,10 +87,8 @@
                 <ion-text>Poor to Moderate</ion-text>
               </ion-col> -->
             </ion-row>
-          </ion-card>
         </div>
         <div v-if="selectedSegment === 'segment3'">
-          <ion-card>
             <ion-row>
               <ion-list>
                 <ion-item v-for="(value, key) in slopeInfo" :key="key">
@@ -110,10 +110,8 @@
                 <ion-text>Moderately Sloping</ion-text>
               </ion-col> -->
             </ion-row>
-          </ion-card>
         </div>
         <div v-if="selectedSegment === 'segment4'">
-          <ion-card>
             <ion-row>
               <ion-list>
                 <ion-item v-for="(value, key) in soilInfo" :key="key">
@@ -146,10 +144,8 @@
                 <ion-text>Fine Loamy Eutric Humicyepts</ion-text>
               </ion-col> -->
             </ion-row>
-          </ion-card>
         </div>
         <div v-if="selectedSegment === 'segment5'">
-          <ion-card>
             <ion-row>
               <ion-list>
                 <ion-item v-for="(value, key) in cropsInfo" :key="key">
@@ -185,10 +181,8 @@
                 <ion-text>Paddy,Kiwi</ion-text>
               </ion-col> -->
             </ion-row>
-          </ion-card>
         </div>
         <div v-if="selectedSegment === 'segment6'">
-          <ion-card>
             <ion-row class="ion-padding">
               <ion-list>
                 <ion-item v-for="(value, key) in actionPlanInfo" :key="key">
@@ -208,9 +202,8 @@
                 N, K, Cu, B & Mo</ion-text
               > -->
             </ion-row>
-          </ion-card>
         </div>
-      </ion-card>
+        <ion-button expand="block" size="small" @click="$router.push('/generatereport')" class="ion-margin" color="primary">Generate Report</ion-button>
     </ion-content>
   </div>
 </template>
@@ -271,6 +264,9 @@ export default {
     print() {
       console.log("++++++++++++++++", this.featureInfo);
     },
+    generateReportPage(){
+      this.router.push('/generatereport')
+    }
   },
 };
 </script>
@@ -279,7 +275,7 @@ export default {
   position: fixed;
   bottom: 0;
   width: 95%;
-  height: 20vh;
+  height: 30vh;
   overflow-y: scroll;
   overflow-x: scroll;
   background-color: rgb(205, 204, 204);
@@ -298,11 +294,11 @@ ion-card {
   background-color: #3c457c;
 }
 /* ion-segment {
-    --background: #54dc98;
-    color: #cbc5c5;
+  background-color: #3c457c;
   } */
 ion-segment-button {
   --indicator-color: #3c457c;
   color: #9b9b9b;
 }
+
 </style>

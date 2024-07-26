@@ -103,7 +103,7 @@ export default {
       actionPlanInfo: [],
       legendUrl: null,
       showSearchBar:false,
-      showSearchbar1:''
+      showSearchbar1:'',
       coordinate: "",
       hgeom_lables: {
         gw_prospec: "Ground Water Prospects",

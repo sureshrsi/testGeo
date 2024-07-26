@@ -214,10 +214,10 @@
 </ion-row>
 <ion-row>
     <ion-col class="ion-padding-down">
-        <ion-button expand="block" size="small" color="primary">Print</ion-button>
+        <ion-button expand="block" @click="printDownload" size="small" color="primary">Print</ion-button>
     </ion-col>
     <ion-col>
-        <ion-button expand="block" size="small" color="primary">Back</ion-button>
+        <ion-button expand="block" @click="$router.back()" size="small" color="primary">Back</ion-button>
     </ion-col>
 </ion-row>
 </ion-content>
@@ -236,7 +236,17 @@ export default{
     IonRow,
     IonCol,
     IonContent
-  }
+  },
+  methods:{
+    printDownload() {
+      const w = window.open();
+      w.document.write(this.$refs.DownloadComp.$el.innerHTML);
+      w.document.close();
+      w.setTimeout(() => {
+        w.print();
+      }, 1000);
+    },
+  },
 }
 </script>
 <style>

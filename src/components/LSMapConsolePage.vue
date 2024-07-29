@@ -125,7 +125,7 @@ export default {
         long: "Longitude",
       },
       showSearchBar:false,
-      showSearchbar1:''
+      showSearchbar1:'',
       coordinate: "",
       hgeom_lables: {
         gw_prospec: "Ground Water Prospects",

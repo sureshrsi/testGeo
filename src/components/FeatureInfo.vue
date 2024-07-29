@@ -1,8 +1,10 @@
 <template>
   <div v-if="featureInfo" class="feature-info">
     <ion-content>
-      <ion-card>
-        <ion-segment v-model="selectedSegment" mode="ios" :scrollable="true">
+      <div>
+      <ion-grid>
+        <ion-row>
+          <ion-segment v-model="selectedSegment" mode="ios" :scrollable="true" :swipe-gesture="true">
           <ion-segment-button value="segment1">
             <ion-label>LULC</ion-label>
           </ion-segment-button>
@@ -22,14 +24,17 @@
             <ion-label>APLAN</ion-label>
           </ion-segment-button>
         </ion-segment>
+        </ion-row>
+      </ion-grid>
+    </div>
         <div v-if="selectedSegment === 'segment1'">
           <ion-card>
-            <ion-row>
               <ion-list>
                 <ion-item v-for="(value, key) in featureInfo" :key="key">
                   {{ value }}
                 </ion-item>
               </ion-list>
+            </ion-card>
               <!-- <ion-col v-for="(value, key) in featureInfo" :key="key">
                 <ion-text
                   ><strong>{{ key }} </strong></ion-text
@@ -52,13 +57,10 @@
               <ion-col>
                 <ion-text>15614561</ion-text>
               </ion-col> -->
-            </ion-row>
-          </ion-card>
         </div>
 
         <div v-if="selectedSegment === 'segment2'">
-          <ion-card>
-            <ion-row>
+        <ion-card>
               <ion-list>
                 <ion-item v-for="(value, key) in heomInfo" :key="key">
                   {{ value }}
@@ -84,12 +86,10 @@
               <ion-col>
                 <ion-text>Poor to Moderate</ion-text>
               </ion-col> -->
-            </ion-row>
           </ion-card>
         </div>
         <div v-if="selectedSegment === 'segment3'">
           <ion-card>
-            <ion-row>
               <ion-list>
                 <ion-item v-for="(value, key) in slopeInfo" :key="key">
                   {{ value }}
@@ -109,12 +109,10 @@
               <ion-col>
                 <ion-text>Moderately Sloping</ion-text>
               </ion-col> -->
-            </ion-row>
           </ion-card>
         </div>
         <div v-if="selectedSegment === 'segment4'">
           <ion-card>
-            <ion-row>
               <ion-list>
                 <ion-item v-for="(value, key) in soilInfo" :key="key">
                   {{ value }}
@@ -145,17 +143,16 @@
               <ion-col>
                 <ion-text>Fine Loamy Eutric Humicyepts</ion-text>
               </ion-col> -->
-            </ion-row>
           </ion-card>
         </div>
         <div v-if="selectedSegment === 'segment5'">
           <ion-card>
-            <ion-row>
               <ion-list>
                 <ion-item v-for="(value, key) in cropsInfo" :key="key">
                   {{ value }}
                 </ion-item>
               </ion-list>
+            </ion-card>
               <!-- <ion-col>
                 <ion-text
                   ><strong>Highly Suitable Crops(s1): </strong></ion-text
@@ -184,17 +181,15 @@
               <ion-col>
                 <ion-text>Paddy,Kiwi</ion-text>
               </ion-col> -->
-            </ion-row>
-          </ion-card>
         </div>
         <div v-if="selectedSegment === 'segment6'">
           <ion-card>
-            <ion-row class="ion-padding">
               <ion-list>
                 <ion-item v-for="(value, key) in actionPlanInfo" :key="key">
                   {{ value }}
                 </ion-item>
               </ion-list>
+            </ion-card>
               <!-- <ion-text
                 ><strong
                   >Action Plan for Resources Development :
@@ -207,10 +202,8 @@
                 land; application of 8.00 tonnes/ha of lime and application of
                 N, K, Cu, B & Mo</ion-text
               > -->
-            </ion-row>
-          </ion-card>
         </div>
-      </ion-card>
+        <ion-button expand="block" size="small" @click="$router.push('/generatereport')" class="ion-margin" color="primary">Generate Report</ion-button>
     </ion-content>
   </div>
 </template>
@@ -271,17 +264,20 @@ export default {
     print() {
       console.log("++++++++++++++++", this.featureInfo);
     },
+    generateReportPage(){
+      this.router.push('/generatereport')
+    }
   },
 };
 </script>
 <style scoped>
 .feature-info {
-  position: fixed;
+  padding-left: 0%;
+  position: absolute;
   bottom: 0;
-  width: 95%;
-  height: 20vh;
+  min-width:95%;
+  height: 30%;
   overflow-y: scroll;
-  overflow-x: scroll;
   background-color: rgb(205, 204, 204);
   z-index: 999; /* Ensure it appears above other elements */
   border-top: 1px solid #3c457c;
@@ -292,17 +288,18 @@ ion-card {
   overflow-x: scroll;
   /* background-color: #3C457C; */
   color: #a1a0a5;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
+  box-shadow: 1px 1px 6px rgb(96, 96, 161);
 }
 .contentBgColor {
   background-color: #3c457c;
 }
 /* ion-segment {
-    --background: #54dc98;
-    color: #cbc5c5;
+  background-color: #3c457c;
   } */
 ion-segment-button {
   --indicator-color: #3c457c;
   color: #9b9b9b;
 }
+
 </style>

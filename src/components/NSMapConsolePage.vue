@@ -983,21 +983,21 @@ ion-img {
   cursor: pointer;
 } */
 
- .search-bar{
-  /* position:absolute; */
-  top:0.5rem; /*Adjust as needed
+.search-bar {
+  position:absolute;
+  top: 0.5rem; /*Adjust as needed
   left: 1vh; Adjust as needed */
   /* bottom: 1vh; */
-  width:100%;  /*Adjust as needed
+  width: 90%; /*Adjust as needed
   padding-top: 1vh;
   /* font-size: 16px; */
   height: 3rem;
   border-radius: 1rem;
   left: 0rem;
-  z-index:99999;
+  z-index: 99999;
   display: flex;
   align-items: center;
   flex-grow: 8;
   margin-left: 5px;
- }
+}
 </style>

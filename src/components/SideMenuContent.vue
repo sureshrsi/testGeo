@@ -18,23 +18,23 @@
                 >
                 <hr />
                 <ion-card-content>
-                <ion-select
-                  interface="popover"
-                  label="Select Circle"
-                  label-placement="floating"
-                  placeholder="Select Circle"
-                  fill="outline"
-                  v-model="selectedCircleGid"
-                  @update:modelValue="getGrid(), getVillage()"
-                >
-                  <ion-select-option
-                    v-for="circle in circleNamesList"
-                    :key="circle.gid"
-                    :value="circle.gid"
-                    >{{ circle.cir_name }}</ion-select-option
+                  <ion-select
+                    interface="popover"
+                    label="Select Circle"
+                    label-placement="floating"
+                    placeholder="Select Circle"
+                    fill="outline"
+                    v-model="selectedCircleGid"
+                    @update:modelValue="getGrid(), getVillage()"
                   >
-                </ion-select>
-              </ion-card-content>
+                    <ion-select-option
+                      v-for="circle in circleNamesList"
+                      :key="circle.gid"
+                      :value="circle.gid"
+                      >{{ circle.cir_name }}</ion-select-option
+                    >
+                  </ion-select>
+                </ion-card-content>
                 <ion-segment
                   v-model="selectedSegment"
                   mode="ios"
@@ -51,55 +51,55 @@
                   </ion-segment-button>
                 </ion-segment>
                 <ion-card-content>
-                <div v-if="selectedSegment === 'segment1'">
-                  <ion-select
-                    class="ion-margin-top"
-                    interface="popover"
-                    label="Select Grid No"
-                    label-placement="floating"
-                    placeholder="Select Grid No"
-                    fill="outline"
-                  >
-                    <ion-select-option
-                      v-for="grid in gridNoList"
-                      :key="grid.gid"
-                      >{{ grid.grid_no }}</ion-select-option
+                  <div v-if="selectedSegment === 'segment1'">
+                    <ion-select
+                      class="ion-margin-top"
+                      interface="popover"
+                      label="Select Grid No"
+                      label-placement="floating"
+                      placeholder="Select Grid No"
+                      fill="outline"
                     >
-                  </ion-select>
-                </div>
-                <div v-if="selectedSegment === 'segment2'">
-                  <ion-select
-                    class="ion-margin-top"
-                    interface="popover"
-                    label="Select Village"
-                    label-placement="floating"
-                    placeholder="Select Village"
-                    fill="outline"
-                  >
-                    <ion-select-option
-                      v-for="village in villageNamesList"
-                      :key="village.gid"
-                      >{{ village.name }}</ion-select-option
+                      <ion-select-option
+                        v-for="grid in gridNoList"
+                        :key="grid.gid"
+                        >{{ grid.grid_no }}</ion-select-option
+                      >
+                    </ion-select>
+                  </div>
+                  <div v-if="selectedSegment === 'segment2'">
+                    <ion-select
+                      class="ion-margin-top"
+                      interface="popover"
+                      label="Select Village"
+                      label-placement="floating"
+                      placeholder="Select Village"
+                      fill="outline"
                     >
-                  </ion-select>
-                </div>
-                <div v-if="selectedSegment === 'segment3'">
-                  <ion-select
-                    class="ion-margin-top"
-                    interface="popover"
-                    label="Select Watershed"
-                    label-placement="floating"
-                    placeholder="Select Watershed"
-                    fill="outline"
-                  >
-                    <ion-select-option value="circle1"
-                      >Circle 1</ion-select-option
+                      <ion-select-option
+                        v-for="village in villageNamesList"
+                        :key="village.gid"
+                        >{{ village.name }}</ion-select-option
+                      >
+                    </ion-select>
+                  </div>
+                  <div v-if="selectedSegment === 'segment3'">
+                    <ion-select
+                      class="ion-margin-top"
+                      interface="popover"
+                      label="Select Watershed"
+                      label-placement="floating"
+                      placeholder="Select Watershed"
+                      fill="outline"
                     >
-                    <ion-select-option value="circle2"
-                      >Circle 2</ion-select-option
-                    >
-                  </ion-select>
-                </div>
+                      <ion-select-option value="circle1"
+                        >Circle 1</ion-select-option
+                      >
+                      <ion-select-option value="circle2"
+                        >Circle 2</ion-select-option
+                      >
+                    </ion-select>
+                  </div>
                 </ion-card-content>
               </ion-card>
               <ion-card class="cardSize">
@@ -135,25 +135,25 @@
                   ><h4>{{ pageTitle }}</h4></ion-text
                 >
                 <hr />
-<ion-card-content>
-                <ion-select
-                  class="ion-margin-top"
-                  interface="popover"
-                  label="Select Circle"
-                  label-placement="floating"
-                  placeholder="Select Circle"
-                  fill="outline"
-                  v-model="selectedCircleGid"
-                  @update:modelValue="getGrid(), getVillage()"
-                >
-                  <ion-select-option
-                    v-for="circle in circleNamesList"
-                    :key="circle.gid"
-                    :value="circle.gid"
-                    >{{ circle.cir_name }}</ion-select-option
+                <ion-card-content>
+                  <ion-select
+                    class="ion-margin-top"
+                    interface="popover"
+                    label="Select Circle"
+                    label-placement="floating"
+                    placeholder="Select Circle"
+                    fill="outline"
+                    v-model="selectedCircleGid"
+                    @update:modelValue="getGrid(), getVillage()"
                   >
-                </ion-select>
-              </ion-card-content>
+                    <ion-select-option
+                      v-for="circle in circleNamesList"
+                      :key="circle.gid"
+                      :value="circle.gid"
+                      >{{ circle.cir_name }}</ion-select-option
+                    >
+                  </ion-select>
+                </ion-card-content>
 
                 <ion-segment
                   v-model="selectedSegment"
@@ -170,57 +170,57 @@
                     <ion-label>Watershed</ion-label>
                   </ion-segment-button>
                 </ion-segment>
-<ion-card-content>
-                <div v-if="selectedSegment === 'segment1'">
-                  <ion-select
-                    class="ion-margin-top"
-                    interface="popover"
-                    label="Select Grid No"
-                    label-placement="floating"
-                    placeholder="Select Grid No"
-                    fill="outline"
-                  >
-                    <ion-select-option
-                      v-for="grid in gridNoList"
-                      :key="grid.gid"
-                      >{{ grid.grid_no }}</ion-select-option
+                <ion-card-content>
+                  <div v-if="selectedSegment === 'segment1'">
+                    <ion-select
+                      class="ion-margin-top"
+                      interface="popover"
+                      label="Select Grid No"
+                      label-placement="floating"
+                      placeholder="Select Grid No"
+                      fill="outline"
                     >
-                  </ion-select>
-                </div>
-                <div v-if="selectedSegment === 'segment2'">
-                  <ion-select
-                    class="ion-margin-top"
-                    interface="popover"
-                    label="Select Village"
-                    label-placement="floating"
-                    placeholder="Select Village"
-                    fill="outline"
-                  >
-                    <ion-select-option
-                      v-for="village in villageNamesList"
-                      :key="village.gid"
-                      >{{ village.name }}</ion-select-option
+                      <ion-select-option
+                        v-for="grid in gridNoList"
+                        :key="grid.gid"
+                        >{{ grid.grid_no }}</ion-select-option
+                      >
+                    </ion-select>
+                  </div>
+                  <div v-if="selectedSegment === 'segment2'">
+                    <ion-select
+                      class="ion-margin-top"
+                      interface="popover"
+                      label="Select Village"
+                      label-placement="floating"
+                      placeholder="Select Village"
+                      fill="outline"
                     >
-                  </ion-select>
-                </div>
-                <div v-if="selectedSegment === 'segment3'">
-                  <ion-select
-                    class="ion-margin-top"
-                    interface="popover"
-                    label="Select Watershed"
-                    label-placement="floating"
-                    placeholder="Select Watershed"
-                    fill="outline"
-                  >
-                    <ion-select-option value="circle1"
-                      >Circle 1</ion-select-option
+                      <ion-select-option
+                        v-for="village in villageNamesList"
+                        :key="village.gid"
+                        >{{ village.name }}</ion-select-option
+                      >
+                    </ion-select>
+                  </div>
+                  <div v-if="selectedSegment === 'segment3'">
+                    <ion-select
+                      class="ion-margin-top"
+                      interface="popover"
+                      label="Select Watershed"
+                      label-placement="floating"
+                      placeholder="Select Watershed"
+                      fill="outline"
                     >
-                    <ion-select-option value="circle2"
-                      >Circle 2</ion-select-option
-                    >
-                  </ion-select>
-                </div>
-              </ion-card-content>
+                      <ion-select-option value="circle1"
+                        >Circle 1</ion-select-option
+                      >
+                      <ion-select-option value="circle2"
+                        >Circle 2</ion-select-option
+                      >
+                    </ion-select>
+                  </div>
+                </ion-card-content>
               </ion-card>
               <ion-card class="cardSize">
                 <ion-text><h4>Layer Control</h4></ion-text>
@@ -255,25 +255,25 @@
                   ><h4>{{ pageTitle }}</h4></ion-text
                 >
                 <hr />
-<ion-card-content>
-                <ion-select
-                  class="ion-margin-top"
-                  interface="popover"
-                  label="Select Circle"
-                  label-placement="floating"
-                  placeholder="Select Circle"
-                  fill="outline"
-                  v-model="selectedCircleGid"
-                  @update:modelValue="getGrid(), getVillage()"
-                >
-                  <ion-select-option
-                    v-for="circle in circleNamesList"
-                    :key="circle.gid"
-                    :value="circle.gid"
-                    >{{ circle.cir_name }}</ion-select-option
+                <ion-card-content>
+                  <ion-select
+                    class="ion-margin-top"
+                    interface="popover"
+                    label="Select Circle"
+                    label-placement="floating"
+                    placeholder="Select Circle"
+                    fill="outline"
+                    v-model="selectedCircleGid"
+                    @update:modelValue="getGrid(), getVillage()"
                   >
-                </ion-select>
-              </ion-card-content>
+                    <ion-select-option
+                      v-for="circle in circleNamesList"
+                      :key="circle.gid"
+                      :value="circle.gid"
+                      >{{ circle.cir_name }}</ion-select-option
+                    >
+                  </ion-select>
+                </ion-card-content>
                 <ion-segment
                   v-model="selectedSegment"
                   mode="ios"
@@ -289,57 +289,57 @@
                     <ion-label>Watershed</ion-label>
                   </ion-segment-button>
                 </ion-segment>
-<ion-card-content>
-                <div v-if="selectedSegment === 'segment1'">
-                  <ion-select
-                    class="ion-margin-top"
-                    interface="popover"
-                    label="Select Grid No"
-                    label-placement="floating"
-                    placeholder="Select Grid No"
-                    fill="outline"
-                  >
-                    <ion-select-option
-                      v-for="grid in gridNoList"
-                      :key="grid.gid"
-                      >{{ grid.grid_no }}</ion-select-option
+                <ion-card-content>
+                  <div v-if="selectedSegment === 'segment1'">
+                    <ion-select
+                      class="ion-margin-top"
+                      interface="popover"
+                      label="Select Grid No"
+                      label-placement="floating"
+                      placeholder="Select Grid No"
+                      fill="outline"
                     >
-                  </ion-select>
-                </div>
-                <div v-if="selectedSegment === 'segment2'">
-                  <ion-select
-                    class="ion-margin-top"
-                    interface="popover"
-                    label="Select Village"
-                    label-placement="floating"
-                    placeholder="Select Village"
-                    fill="outline"
-                  >
-                    <ion-select-option
-                      v-for="village in villageNamesList"
-                      :key="village.gid"
-                      >{{ village.name }}</ion-select-option
+                      <ion-select-option
+                        v-for="grid in gridNoList"
+                        :key="grid.gid"
+                        >{{ grid.grid_no }}</ion-select-option
+                      >
+                    </ion-select>
+                  </div>
+                  <div v-if="selectedSegment === 'segment2'">
+                    <ion-select
+                      class="ion-margin-top"
+                      interface="popover"
+                      label="Select Village"
+                      label-placement="floating"
+                      placeholder="Select Village"
+                      fill="outline"
                     >
-                  </ion-select>
-                </div>
-                <div v-if="selectedSegment === 'segment3'">
-                  <ion-select
-                    class="ion-margin-top"
-                    interface="popover"
-                    label="Select Watershed"
-                    label-placement="floating"
-                    placeholder="Select Watershed"
-                    fill="outline"
-                  >
-                    <ion-select-option value="circle1"
-                      >Circle 1</ion-select-option
+                      <ion-select-option
+                        v-for="village in villageNamesList"
+                        :key="village.gid"
+                        >{{ village.name }}</ion-select-option
+                      >
+                    </ion-select>
+                  </div>
+                  <div v-if="selectedSegment === 'segment3'">
+                    <ion-select
+                      class="ion-margin-top"
+                      interface="popover"
+                      label="Select Watershed"
+                      label-placement="floating"
+                      placeholder="Select Watershed"
+                      fill="outline"
                     >
-                    <ion-select-option value="circle2"
-                      >Circle 2</ion-select-option
-                    >
-                  </ion-select>
-                </div>
-              </ion-card-content>
+                      <ion-select-option value="circle1"
+                        >Circle 1</ion-select-option
+                      >
+                      <ion-select-option value="circle2"
+                        >Circle 2</ion-select-option
+                      >
+                    </ion-select>
+                  </div>
+                </ion-card-content>
               </ion-card>
 
               <ion-card class="cardSize">
@@ -369,10 +369,10 @@
             </ion-col>
           </ion-row>
           <ion-row>
-          <ion-text class="textAlign" color="light">
-        About Us|Feedback|Contact Us
-      </ion-text>
-    </ion-row>
+            <ion-text class="textAlign" color="light">
+              About Us|Feedback|Contact Us
+            </ion-text>
+          </ion-row>
         </div>
       </ion-list>
     </ion-content>
@@ -476,7 +476,7 @@ export default {
     async getCircle() {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/v1/circle/getcircle`
+          `http://192.168.1.111:3000/api/v1/circle/getcircle`
         );
         this.circleNamesList = response.data;
         console.log("Data:", response.data);
@@ -488,7 +488,7 @@ export default {
       try {
         console.log("selected circle name", this.selectedCircleGid);
         const response = await axios.get(
-          `http://localhost:3000/api/v1/grid/getGridByCircleGid`,
+          `http://192.168.1.111:3000/api/v1/grid/getGridByCircleGid`,
           {
             params: { query: this.selectedCircleGid },
           }
@@ -503,7 +503,7 @@ export default {
       try {
         console.log("selected circle name", this.selectedCircleGid);
         const response = await axios.get(
-          `http://localhost:3000/api/v1/village/getVillageByCircleGid`,
+          `http://192.168.1.111:3000/api/v1/village/getVillageByCircleGid`,
           {
             params: { query: this.selectedCircleGid },
           }
@@ -531,7 +531,7 @@ hr {
   color: #e6e7ea;
   /* background-color: #3c457c; */
 }
-ion-segment-button{
+ion-segment-button {
   color: rgb(108, 106, 106);
 }
 /* ion-segment{
@@ -545,14 +545,14 @@ ion-segment-button{
   display: flex;
   align-items: center;
 } */
- .cardSize{
+.cardSize {
   height: 15.6rem;
   overflow-y: scroll;
- }
-ion-card{
+}
+ion-card {
   border-radius: 1rem;
 }
-.textAlign{
+.textAlign {
   align-items: center;
   text-align: center;
 }

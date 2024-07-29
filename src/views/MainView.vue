@@ -17,7 +17,7 @@
 </template>
 <script>
 import MainPage from "../components/MainPage.vue";
-import { defineComponent, ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { App } from "@capacitor/app";
 import { useRouter } from "vue-router";
 export default {

@@ -973,11 +973,11 @@ ion-img {
   height: 2rem;
 }
 .search-bar {
-  /* position:absolute; */
+  position:absolute;
   top: 0.5rem; /*Adjust as needed
   left: 1vh; Adjust as needed */
   /* bottom: 1vh; */
-  width: 100%; /*Adjust as needed
+  width: 90%; /*Adjust as needed
   padding-top: 1vh;
   /* font-size: 16px; */
   height: 3rem;

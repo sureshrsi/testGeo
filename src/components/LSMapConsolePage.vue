@@ -56,6 +56,15 @@
 
       <ion-content class="ion-padding">
         <div id="map" class="map"></div>
+        <FeatureInfo
+          :featureInfo="featureInfo"
+          :heomInfo="heomInfo"
+          :slopeInfo="slopeInfo"
+          :soilInfo="soilInfo"
+          :cropsInfo="cropsInfo"
+          :actionPlanInfo="actionPlanInfo"
+          @update:isOpen="isFeatureInfoOpen = $event"
+        />
         <!-- <div v-if="featureInfo" class="feature-info">
           <h3>Feature adfssdfsdaf Info</h3>
           <p v-for="(value, key) in featureInfo" :key="key">
@@ -70,17 +79,6 @@
           </ion-pre>
         </div> -->
       </ion-content>
-      <ion-footer>
-        <FeatureInfo
-          :featureInfo="featureInfo"
-          :heomInfo="heomInfo"
-          :slopeInfo="slopeInfo"
-          :soilInfo="soilInfo"
-          :cropsInfo="cropsInfo"
-          :actionPlanInfo="actionPlanInfo"
-          @update:isOpen="isFeatureInfoOpen = $event"
-        />
-      </ion-footer>
     </ion-page>
   </div>
 </template>
@@ -1030,7 +1028,7 @@ ion-img {
 }
 
 .search-bar {
-  position:absolute;
+  position: absolute;
   top: 0.5rem; /*Adjust as needed
   left: 1vh; Adjust as needed */
   /* bottom: 1vh; */

@@ -45,6 +45,8 @@
             class="search-bar"
             placeholder="Search..."
             v-model="showSearchbar1"
+            @ionClear="clearSearch"
+            @ionInput="handleInput"
           ></ion-searchbar>
         </ion-toolbar>
       </ion-header>
@@ -96,7 +98,7 @@ import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
 import LayerGroup from "ol/layer/Group";
 // import LayerSwitcher from "ol-layerswitcher";
-import { transform } from "ol/proj";
+import { transform, fromLonLat } from "ol/proj";
 import "ol-layerswitcher/dist/ol-layerswitcher.css";
 // import CustomLayerSwitcherControl from "./CustomLayerSwitcherControl";
 import CustomLayerSwitcher from "./CustomLayerSwitcher.vue";
@@ -450,6 +452,8 @@ export default {
         // minZoom: 10.5,
         maxZoom: 18,
       });
+
+      this.view = view;
 
       this.map = new Map({
         target: "map",
@@ -943,6 +947,25 @@ export default {
         // Stop after the first visible layer with feature info
       }
     },
+    handleInput(event) {
+      const value = event.target.value;
+      const coordinates = value
+        .split(",")
+        .map((coord) => parseFloat(coord.trim()));
+      if (
+        coordinates.length === 2 &&
+        !isNaN(coordinates[0]) &&
+        !isNaN(coordinates[1])
+      ) {
+        this.zoomToCoordinates(coordinates[0], coordinates[1]);
+      } else {
+        alert("Please enter valid coordinates in the format: lat, lng");
+      }
+    },
+    zoomToCoordinates(lat, lng) {
+      this.view.setCenter(fromLonLat([lng, lat]));
+      this.view.setZoom(10); // Set your desired zoom level
+    },
   },
   watch: {
     // Watch for changes in layer visibility to update the legend
@@ -973,7 +996,7 @@ ion-img {
   height: 2rem;
 }
 .search-bar {
-  position:absolute;
+  position: absolute;
   top: 0.5rem; /*Adjust as needed
   left: 1vh; Adjust as needed */
   /* bottom: 1vh; */

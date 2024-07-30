@@ -9,6 +9,10 @@ import LSMapConsoleView from '../views/LSMapConsoleView.vue'
 import TWMapConsoleView from '../views/TWMapConsoleView.vue'
 import GenerateReport from '../components/generateReport.vue';
 
+import AboutView from '../views/AboutView.vue';
+import FeedbackView from '../views/FeedbackView.vue';
+import ContactView from '../views/ContactView.vue';
+
 const routes = [
   {
     path: '/',
@@ -43,6 +47,21 @@ const routes = [
   path:'/generatereport',
   name:'generateReport',
   component:GenerateReport
+},
+{
+  path:'/about',
+  name:'About',
+  component: AboutView
+},
+{
+  path:'/feedback',
+  name:'Feedback',
+  component:FeedbackView
+},
+{
+  path:'/contact',
+  name:'contact',
+  component:ContactView
 },
   // {
   //   path: '/',

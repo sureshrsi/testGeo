@@ -369,8 +369,14 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-text class="textAlign" color="light">
-              About Us|Feedback|Contact Us
+            <ion-text class="textAlign" color="light" router-link="/about">
+              About Us|
+            </ion-text>
+            <ion-text class="textAlign" color="light" router-link="/feedback">
+              Feedback |
+            </ion-text>
+            <ion-text class="textAlign" color="light" router-link="/contact">
+              Contact Us
             </ion-text>
           </ion-row>
         </div>

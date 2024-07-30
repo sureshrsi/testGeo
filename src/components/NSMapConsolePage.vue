@@ -29,10 +29,26 @@
           <ion-title>
             <ion-img :src="imageSrc" class="imgPadding"> </ion-img>
           </ion-title>
-          <ion-button slot="end" color="primary" class="iom-padding-right" @click="searchBar">
+          <ion-button
+            slot="end"
+            color="primary"
+            class="iom-padding-right"
+            @click="searchBar"
+          >
             <ion-icon name="search-outline"></ion-icon>
           </ion-button>
-          <ion-searchbar v-if="showSearchBar" show-clear-button="always" color="primary" :clear-icon="trashBin" class="search-bar" placeholder="Search..." v-model="showSearchbar1"></ion-searchbar>
+          <ion-searchbar
+            v-if="showSearchBar"
+            show-clear-button="always"
+            color="primary"
+            :clear-icon="trashBin"
+            class="search-bar"
+            placeholder="Search..."
+            v-model="showSearchbar1"
+            @ionClear="clearSearch"
+            @ionInput="handleInput"
+          ></ion-searchbar>
+          <input type="file" accept=".kmz,.kml" @change="handleFileKml" />
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
@@ -76,7 +92,7 @@ import {
   IonBackButton,
   IonImg,
   IonSearchbar,
-  IonIcon
+  IonIcon,
 } from "@ionic/vue";
 import "ol/ol.css";
 import { Map, View } from "ol";
@@ -85,7 +101,7 @@ import TileWMS from "ol/source/TileWMS";
 import OSM from "ol/source/OSM";
 import LayerGroup from "ol/layer/Group";
 // import LayerSwitcher from "ol-layerswitcher";
-import { transform, transformExtent } from "ol/proj";
+import { transform, fromLonLat } from "ol/proj";
 import "ol-layerswitcher/dist/ol-layerswitcher.css";
 // import CustomLayerSwitcherControl from "./CustomLayerSwitcherControl";
 import CustomLayerSwitcher from "./CustomLayerSwitcher.vue";
@@ -93,12 +109,20 @@ import SideMenuContent from "./SideMenuContent.vue";
 import FeatureInfo from "./FeatureInfo.vue";
 import Logo from "@/assets/img/SOLARISLogo.png";
 
+// Importing JSZip to handle KMZ files
+import JSZip from "jszip";
+// Importing library to handle KML parsing
+import { KML } from "ol/format";
+import VectorSource from "ol/source/Vector";
+import VectorLayer from "ol/layer/Vector";
+
 export default {
   data() {
     return {
       layers: [],
       imageSrc: Logo,
       map: null,
+      view: null,
       overlay: null,
       featureInfo: [],
       heomInfo: [],
@@ -159,7 +183,7 @@ export default {
     FeatureInfo,
     IonImg,
     IonSearchbar,
-    IonIcon
+    IonIcon,
   },
   mounted() {
     this.initializeMap();
@@ -455,6 +479,7 @@ export default {
         // minZoom: 10.5,
         maxZoom: 18,
       });
+      this.view = view;
 
       this.map = new Map({
         target: "map",
@@ -949,7 +974,72 @@ export default {
         // Stop after the first visible layer with feature info
       }
     },
+    handleInput(event) {
+      const value = event.target.value;
+      const coordinates = value
+        .split(",")
+        .map((coord) => parseFloat(coord.trim()));
+      if (
+        coordinates.length === 2 &&
+        !isNaN(coordinates[0]) &&
+        !isNaN(coordinates[1])
+      ) {
+        this.zoomToCoordinates(coordinates[0], coordinates[1]);
+      } else {
+        alert("Please enter valid coordinates in the format: lat, lng");
+      }
+    },
+    zoomToCoordinates(lat, lng) {
+      this.view.setCenter(fromLonLat([lng, lat]));
+      this.view.setZoom(10); // Set your desired zoom level
+    },
+    handleFileKml(event) {
+      const file = event.target.files[0];
+      const vm = this; // Store reference to 'this'
+
+      if (file) {
+        const reader = new FileReader();
+        console.log("kml file", file);
+
+        reader.onload = function (e) {
+          const kmlData = e.target.result;
+          console.log("kml data", kmlData);
+          vm.displayKmlOnMap(kmlData); // Use stored reference
+        };
+
+        reader.readAsText(file);
+      }
+    },
+    displayKmlOnMap(kmlData) {
+      let kmlLayer = null;
+      this.map.removeLayer(kmlLayer);
+      const vectorSource = new VectorSource({
+        format: new KML(),
+        url: "data:text/xml;charset=utf-8," + encodeURIComponent(kmlData),
+      });
+      console.log("vector source", vectorSource);
+      kmlLayer = new VectorLayer({
+        source: vectorSource,
+        title: "kml",
+        name: "kml",
+        visible: true,
+      });
+      console.log("kml layer", kmlLayer);
+      this.map.addLayer(kmlLayer);
+
+      // Wait for the vector layer to load before fitting the view
+      // Use an arrow function to maintain the correct context of 'this'
+      vectorSource.once("change", () => {
+        console.log("Layer change event triggered");
+
+        if (vectorSource.getState() === "ready") {
+          console.log("Vector source is ready, fitting the map view");
+          this.map.getView().fit(vectorSource.getExtent(), this.map.getSize());
+        }
+      });
+    },
   },
+
   watch: {
     // Watch for changes in layer visibility to update the legend
     layers: {
@@ -984,7 +1074,7 @@ ion-img {
 } */
 
 .search-bar {
-  position:absolute;
+  position: absolute;
   top: 0.5rem; /*Adjust as needed
   left: 1vh; Adjust as needed */
   /* bottom: 1vh; */

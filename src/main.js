@@ -38,12 +38,13 @@ import './theme/variables.css';
 import './theme/style.css'
 
 import { addIcons } from 'ionicons';
-import { homeOutline, searchOutline, closeCircleOutline } from 'ionicons/icons';
+import { homeOutline, searchOutline, closeCircleOutline,cloudUploadOutline } from 'ionicons/icons';
 
 addIcons({
   'home-outline': homeOutline,
   'search-outline': searchOutline,
-  'close-circle-outline': closeCircleOutline
+  'close-circle-outline': closeCircleOutline,
+  'cloud-upload-outline': cloudUploadOutline
 });
 
 

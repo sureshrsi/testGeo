@@ -48,7 +48,11 @@
             @ionClear="clearSearch"
             @ionInput="handleInput"
           ></ion-searchbar>
-          <input type="file" accept=".kmz,.kml" @change="handleFileKml" />
+          <!-- <input type="file" accept=".kmz,.kml" @change="handleFileKml" title=""/> -->
+          <div slot="end" class="file-upload-container">
+    <input type="file" id="fileInput" ref="fileInput" @change="handleFileKml" />
+    <ion-button slot="end" color="primary" @click="triggerFileInput"><ion-icon name="cloud-upload-outline"></ion-icon></ion-button>
+  </div>
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
@@ -189,6 +193,10 @@ export default {
     this.initializeMap();
   },
   methods: {
+    triggerFileInput() {
+      console.log('Triggering file input...');
+      this.$refs.fileInput.click(); // Programmatically click the file input
+    },
     searchBar() {
       this.showSearchBar = !this.showSearchBar;
     },
@@ -1078,16 +1086,19 @@ ion-img {
   top: 0.5rem; /*Adjust as needed
   left: 1vh; Adjust as needed */
   /* bottom: 1vh; */
-  width: 90%; /*Adjust as needed
+  width: 70%; /*Adjust as needed
   padding-top: 1vh;
   /* font-size: 16px; */
   height: 3rem;
   border-radius: 1rem;
-  left: 0rem;
+  left: -0.5rem;
   z-index: 99999;
   display: flex;
   align-items: center;
   flex-grow: 8;
   margin-left: 5px;
+}
+input[type="file"] {
+  display: none;
 }
 </style>

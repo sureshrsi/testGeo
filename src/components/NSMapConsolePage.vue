@@ -50,9 +50,16 @@
           ></ion-searchbar>
           <!-- <input type="file" accept=".kmz,.kml" @change="handleFileKml" title=""/> -->
           <div slot="end" class="file-upload-container">
-    <input type="file" id="fileInput" ref="fileInput" @change="handleFileKml" />
-    <ion-button slot="end" color="primary" @click="triggerFileInput"><ion-icon name="cloud-upload-outline"></ion-icon></ion-button>
-  </div>
+            <input
+              type="file"
+              id="fileInput"
+              ref="fileInput"
+              @change="handleFileKml"
+            />
+            <ion-button slot="end" color="primary" @click="triggerFileInput"
+              ><ion-icon name="cloud-upload-outline"></ion-icon
+            ></ion-button>
+          </div>
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
@@ -64,8 +71,12 @@
           :soilInfo="soilInfo"
           :cropsInfo="cropsInfo"
           :actionPlanInfo="actionPlanInfo"
+          :extentImageUrl="extentImageUrl"
+          :distCirlce="distCirlce"
+          :gridInfo="gridInfo"
           @update:isOpen="isFeatureInfoOpen = $event"
         />
+
         <!-- <div v-if="featureInfo" class="feature-info">
           <h3>Feature adfssdfsdaf Info</h3>
           <p v-for="(value, key) in featureInfo" :key="key">
@@ -112,6 +123,7 @@ import CustomLayerSwitcher from "./CustomLayerSwitcher.vue";
 import SideMenuContent from "./SideMenuContent.vue";
 import FeatureInfo from "./FeatureInfo.vue";
 import Logo from "@/assets/img/SOLARISLogo.png";
+import markerImg from "@/assets/img/marker.png";
 
 // Importing JSZip to handle KMZ files
 import JSZip from "jszip";
@@ -119,15 +131,26 @@ import JSZip from "jszip";
 import { KML } from "ol/format";
 import VectorSource from "ol/source/Vector";
 import VectorLayer from "ol/layer/Vector";
+import { getCenter, boundingExtent } from "ol/extent";
+// import { boundingExtent } from 'ol/extent';
+import { toStringHDMS } from "ol/coordinate";
+
+import Feature from "ol/Feature";
+import Point from "ol/geom/Point";
+import Style from "ol/style/Style";
+import Icon from "ol/style/Icon";
 
 export default {
   data() {
     return {
       layers: [],
       imageSrc: Logo,
+      MarkerImg: markerImg,
       map: null,
       view: null,
       overlay: null,
+      distCirlce: [],
+      gridInfo: [],
       featureInfo: [],
       heomInfo: [],
       slopeInfo: [],
@@ -144,9 +167,40 @@ export default {
         geom_unit: " Geom Unit",
       },
       soil_lables: {
-        mapping_un: "Mapping Unit",
-        classifica: "Soil Class",
-        descriptio: "Soil Description",
+        soil_code: "Soil Code",
+        mapping_un: "Unit Mapping",
+        series_nam: "",
+        descriptio: "Description",
+        soil_toxon: "Soil Class",
+        dom_tex: "",
+        land_use__: "Land Use / Land Cover",
+        physiograp: "Physiography",
+        parent_mat: "Parent Material",
+        slope____: "Slope(%)",
+        drainage_c: "Drainage Class",
+        soil_erosi: "Soil Erosion Status",
+        soil_depth: "Soil Depth",
+        soil_tex: "Soil Texture",
+        ph__1_2_5_: "pH(1.2.5)",
+        ec__dsm_1_: "EC (dsm-1)",
+        oc____: "Organic Carbon (%)",
+        ca: "Exchangeable Calcuim (meq/100 g)",
+        mg: "Exchangeable Magesium (meq/100 g)",
+        na: "Exchangeable Sodium (meq/100 g)",
+        k: "Exchangeable Potassium (meq/100 g)",
+        cec: "CEC (meq/100 g)",
+        bs: "Base Saturation (%)",
+        avl_n_kg_h: "Available Nitrogen (kg/ha)",
+        avl_p_kg_h: "Available Phosphorus (kg/ha)",
+        avl_k_kg_h: "Available Potassium (kg/ha)",
+        avl_s_ppm: "Available Sulphur (ppm)",
+        avl_fe_ppm: "Available Iron (ppm)",
+        avl_mn_ppm: "Available Manganese (ppm)",
+        avl_cu_ppm: "Available Copper (ppm)",
+        avl_zn_ppm: "Available Zinc (ppm)",
+        avl_b_ppm: "Available Boron (ppm)",
+        avl_mo_ppm: "Available Molybdenum (ppm)",
+        area: "Area (Ha)",
       },
       lulc_lables: {
         lulc: "Land Use Land Cover",
@@ -166,11 +220,57 @@ export default {
       lc_labels: { land_capab: "Land Capability" },
       li_labels: { land_irrig: "Land Irrigability" },
       cs_labels: {
-        s1: "Highly Suitable Crops (S1)",
-        s2: "Moderately Suitable Crops (S2)",
-        s3: "Marginally Suitable Crops (S3)",
+        fid: "id",
+        soil_code: "Soil Code",
+        mapping_un: "Mapping Uint",
+        code: "Code",
+        s1_food_cr: "S1 Food Crops",
+        s1_veg_cro: "S1 Vegetable Crops",
+        s1_oil_see: "S1 Oil Seeds",
+        s1_fr_crop: "S1 Fruit Crops",
+        s1_spices: "S1 Spices",
+        s1_com__cr: "S1 Commercial Crops",
+        s1_h_t_cro: "S1 Highly Tolorent Crops to Acidity",
+        s1_sil_cul: "S1 Silvi Culture",
+
+        s2_food_cr: "S2 Food Crops",
+        s2_veg_cro: "S2 Vegetable Crops",
+        s2_oil_see: "S2 Oil Seeds",
+        s2_fr_crop: "S2 Fruit Crops",
+        s2_spices: "S2 Spices",
+        s2_com__cr: "S2 Commercial Crops",
+        s2_h_t_cro: "S2 Highly Tolorent Crops to Acidity",
+        s2_sil_cul: "S2 Silvi Culture",
+
+        s3_food_cr: "S3 Food Crops",
+        s3_veg_cro: "S3 Vegetable Crops",
+        s3_oil_see: "S3 Oil Seeds",
+        s3_fr_crop: "S3 Fruit Crops",
+        s3_spices: "S3 Spices",
+        s3_com__cr: "S3 Commercial Crops",
+        s3_h_t_cro: "S3 Highly Tolorent Crops to Acidity",
+        s3_sil_cul: "S3 Silvi Culture",
+        // s1: "Highly Suitable Crops (S1)",
+        // s2: "Moderately Suitable Crops (S2)",
+        // s3: "Marginally Suitable Crops (S3)",
       },
-      ap_labels: { action_pla: "Action Plan for Resources Development" },
+      ap_labels: {
+        mapping_un: "Mapping Unit",
+        conservati: "Soil & Water Conservation Measures and Forest Protection",
+        lime_requi: "Lime Requirement (tons/ha as CaO) to raise the pH to 6.4",
+        major_nutr: "Application of Major Nutrients",
+        micro_nutr: "Application of Micro Nutrients",
+      },
+      distCircleLables: {
+        dist_name: "District Name",
+        aa: "Circle Name",
+      },
+      grid_labels: {
+        grid_no: "Grid No",
+      },
+      featureExtent: "",
+      extentImageUrl: "",
+      markerLayer: null, // To hold the marker
     };
   },
   components: {
@@ -194,7 +294,7 @@ export default {
   },
   methods: {
     triggerFileInput() {
-      console.log('Triggering file input...');
+      console.log("Triggering file input...");
       this.$refs.fileInput.click(); // Programmatically click the file input
     },
     searchBar() {
@@ -212,12 +312,12 @@ export default {
 
       const CropSuitabilityLayer = new TileLayer({
         title: "Crop Suitability",
-        name: "namsai_crop_suitability",
+        name: "namsai_crop_suitability5",
         visible: false,
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:namsai_crop_suitability",
+            LAYERS: "NEW_APWS:namsai_crop_suitability5",
             TILED: true,
           },
           serverType: "geoserver",
@@ -228,12 +328,12 @@ export default {
 
       const ActionPlaneLayer = new TileLayer({
         title: "Action Plan",
-        name: "namsai_land_and_water_action_plan",
+        name: "namsai_action_plan_land_water",
         visible: false,
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:namsai_land_and_water_action_plan",
+            LAYERS: "NEW_APWS:namsai_action_plan_land_water",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -249,7 +349,7 @@ export default {
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:namsai_grid_10k",
+            LAYERS: "NEW_APWS:namsai_grid_10k",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -265,7 +365,7 @@ export default {
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:namsai_land_capability",
+            LAYERS: "NEW_APWS:namsai_land_capability",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -280,7 +380,7 @@ export default {
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:namsai_land_degradation",
+            LAYERS: "NEW_APWS:namsai_land_degradation",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -290,12 +390,12 @@ export default {
       });
       const SoilInfoLayer = new TileLayer({
         title: "Soil Information",
-        name: "soil_1_new",
+        name: "namsai_final_soil_soft5",
         visible: false,
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:soil_1_new",
+            LAYERS: "NEW_APWS:namsai_final_soil_soft5",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -311,7 +411,7 @@ export default {
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:namsai_hgeom",
+            LAYERS: "NEW_APWS:namsai_hgeom",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -327,7 +427,7 @@ export default {
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:namsai_lineament",
+            LAYERS: "NEW_APWS:namsai_lineament",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -338,12 +438,12 @@ export default {
 
       const SlopeLayer = new TileLayer({
         title: "Slope Information",
-        name: "namsai_slope_new",
+        name: "namsai_slope",
         visible: false,
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:namsai_slope_new",
+            LAYERS: "NEW_APWS:namsai_slope",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -354,12 +454,12 @@ export default {
 
       const LulcLayer = new TileLayer({
         title: "Land Use Land Cover",
-        name: "namsai_lulc_1_new",
+        name: "namsai_lulc",
         visible: true,
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:namsai_lulc_1_new",
+            LAYERS: "NEW_APWS:namsai_lulc",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -369,12 +469,12 @@ export default {
       });
       const WatershedLayer = new TileLayer({
         title: "Watershed",
-        name: "namsai_watershed_union",
+        name: "namsai_whs",
         visible: false,
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:namsai_watershed_union",
+            LAYERS: "NEW_APWS:namsai_whs",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -390,7 +490,7 @@ export default {
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:namsai_drainp",
+            LAYERS: "NEW_APWS:namsai_drainp",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -406,7 +506,7 @@ export default {
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:namsai_drainl_new",
+            LAYERS: "NEW_APWS:namsai_drainl",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -422,7 +522,7 @@ export default {
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:BaseLayer",
+            LAYERS: "NEW_APWS:BaseLayer",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -438,7 +538,7 @@ export default {
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "APWS:circle_boundary",
+            LAYERS: "NEW_APWS:circle_boundary",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -489,9 +589,14 @@ export default {
       });
       this.view = view;
 
+      // marker on the map
+      this.markerLayer = new VectorLayer({
+        source: new VectorSource(),
+      });
+
       this.map = new Map({
         target: "map",
-        layers: [layerGroup],
+        layers: [layerGroup, this.markerLayer],
         view: view,
       });
 
@@ -579,6 +684,8 @@ export default {
       }
     },
     getTopMostMapClick(event) {
+      this.getDistrictAndCircle(event);
+      this.getGrid(event);
       this.getLulcData(event);
       this.getHGOMData(event);
       this.getSlopeData(event);
@@ -589,6 +696,26 @@ export default {
       const viewResolution = view.getResolution();
       const projection = view.getProjection();
       this.coordinate = event.coordinate;
+
+      // Clear existing markers
+      this.markerLayer.getSource().clear();
+
+      // Add a new marker at the clicked location
+      const marker = new Feature({
+        geometry: new Point(this.coordinate),
+      });
+
+      marker.setStyle(
+        new Style({
+          image: new Icon({
+            src: this.MarkerImg, // Replace with your marker icon path
+            anchor: [0.5, 1],
+          }),
+        })
+      );
+
+      this.markerLayer.getSource().addFeature(marker);
+
       // Iterate through flattened layers from top to bottom to find the topmost visible layer with getFeatureInfoUrl
       for (let i = this.layers.length - 1; i >= 0; i--) {
         const layer = this.layers[i];
@@ -806,7 +933,7 @@ export default {
       }
     },
     getSoilData(event) {
-      this.cropsInfo = [];
+      this.soilInfo = [];
       const view = this.map.getView();
       const viewResolution = view.getResolution();
       const projection = view.getProjection();
@@ -833,26 +960,43 @@ export default {
                           "&&&&&&&&&&&&&&",
                           data.features[index].properties[k]
                         );
-                        this.soilInfo.push(
-                          value + " : " + data.features[index].properties[k]
-                        );
-                        console.log(
-                          "%%%%%%%%%%%%%%%%%#@@#@#@@@#%%%%%%%%%%%%%%%%%%%%%",
-                          this.featureInfo
-                        );
+                        this.soilInfo.push(data.features[index].properties[k]);
+                        console.log("Soil Info", this.soilInfo);
                       }
                     });
                   }
                 }
               }
-              // const feature = data.features[0];
-              // this.featureInfo = feature.properties;
-              // console.log("@@@@@@@@@@@!!!!!!!!!!@@@@@@@@@@", this.featureInfo);
-              // console.log(
-              //   "@@@@@@@@@@@@ Layers @@@@@@@@@",
-              //   this.map.getLayers()
-              // );
+              // Get the geometry and calculate the bounding extent
+              const feature = data.features[0];
+              const geometry = feature.geometry;
+
+              // Log the geometry to inspect its structure
+              console.log("Geometry:", geometry);
+
+              // Check if geometry type is Polygon or MultiPolygon
+              if (geometry.type === "Polygon") {
+                // Check if coordinates exist and calculate the extent
+                if (geometry.coordinates.length > 0) {
+                  this.featureExtent = boundingExtent(geometry.coordinates[0]);
+                }
+              } else if (geometry.type === "MultiPolygon") {
+                // Flatten the coordinates and calculate the extent
+                const allCoordinates = geometry.coordinates.flat(2); // Flatten 2 levels deep
+                if (allCoordinates.length > 0) {
+                  this.featureExtent = boundingExtent(allCoordinates);
+                }
+              } else {
+                console.warn("Unsupported geometry type:", geometry.type);
+                this.featureExtent = null;
+              }
+
+              // Log the feature extent for debugging
+              console.log("Feature Extent:", this.featureExtent);
               this.isFeatureInfoOpen = true;
+
+              // Display the extent image
+              this.displayExtentImage();
             } else {
               this.featureInfo = null;
             }
@@ -886,19 +1030,14 @@ export default {
                   if (Object.hasOwn(data.features[index].properties, k)) {
                     Object.entries(this.cs_labels).forEach(([key, value]) => {
                       if (key === k) {
-                        console.log(
-                          "%%%%%%%%%%%%",
-                          value,
-                          "&&&&&&&&&&&&&&",
-                          data.features[index].properties[k]
-                        );
-                        this.cropsInfo.push(
-                          value + " : " + data.features[index].properties[k]
-                        );
-                        console.log(
-                          "%%%%%%%%%%%%%%%%%#@@#@#@@@#%%%%%%%%%%%%%%%%%%%%%",
-                          this.featureInfo
-                        );
+                        // console.log(
+                        //   "%%%%%%%%%%%%",
+                        //   value,
+                        //   "&&&&&&&&&&&&&&",
+                        //   data.features[index].properties[k]
+                        // );
+                        this.cropsInfo.push(data.features[index].properties[k]);
+                        console.log("crop suitability", this.cropsInfo);
                       }
                     });
                   }
@@ -952,12 +1091,128 @@ export default {
                           data.features[index].properties[k]
                         );
                         this.actionPlanInfo.push(
-                          value + " : " + data.features[index].properties[k]
+                          data.features[index].properties[k]
                         );
                         console.log(
                           "%%%%%%%%%%%%%%%%%#@@#@#@@@#%%%%%%%%%%%%%%%%%%%%%",
                           this.featureInfo
                         );
+                      }
+                    });
+                  }
+                }
+              }
+              // const feature = data.features[0];
+              // this.featureInfo = feature.properties;
+              // console.log("@@@@@@@@@@@!!!!!!!!!!@@@@@@@@@@", this.featureInfo);
+              // console.log(
+              //   "@@@@@@@@@@@@ Layers @@@@@@@@@",
+              //   this.map.getLayers()
+              // );
+              this.isFeatureInfoOpen = true;
+            } else {
+              this.featureInfo = null;
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching feature info:", error);
+            this.featureInfo = null;
+          });
+        // Stop after the first visible layer with feature info
+      }
+    },
+    getDistrictAndCircle(event) {
+      this.distCirlce = [];
+      const view = this.map.getView();
+      const viewResolution = view.getResolution();
+      const projection = view.getProjection();
+      this.coordinate = event.coordinate;
+      const circle_url = this.layers[15]
+        .getSource()
+        .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
+          INFO_FORMAT: "application/json",
+        });
+      if (circle_url) {
+        // console.log("top most url", url);
+        fetch(circle_url)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.features && data.features.length > 0) {
+              for (let index = 0; index < data.features.length; index++) {
+                for (const k in data.features[index].properties) {
+                  if (Object.hasOwn(data.features[index].properties, k)) {
+                    Object.entries(this.distCircleLables).forEach(
+                      ([key, value]) => {
+                        if (key === k) {
+                          console.log(
+                            "%%%%%%%%%%%%",
+                            value,
+                            "&&&&&&&&&&&&&&",
+                            data.features[index].properties[k]
+                          );
+                          this.distCirlce.push(
+                            data.features[index].properties[k]
+                          );
+                          console.log("distCirlce", this.distCirlce);
+                        }
+                      }
+                    );
+                  }
+                }
+              }
+              // const feature = data.features[0];
+              // this.featureInfo = feature.properties;
+              // console.log("@@@@@@@@@@@!!!!!!!!!!@@@@@@@@@@", this.featureInfo);
+              // console.log(
+              //   "@@@@@@@@@@@@ Layers @@@@@@@@@",
+              //   this.map.getLayers()
+              // );
+              this.isFeatureInfoOpen = true;
+            } else {
+              this.featureInfo = null;
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching feature info:", error);
+            this.featureInfo = null;
+          });
+        // Stop after the first visible layer with feature info
+      }
+    },
+    getGrid(event) {
+      this.actionPlanInfo = [];
+      const view = this.map.getView();
+      const viewResolution = view.getResolution();
+      const projection = view.getProjection();
+      this.coordinate = event.coordinate;
+      let dms = toStringHDMS(this.coordinate, 5);
+      const circle_url = this.layers[1]
+        .getSource()
+        .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
+          INFO_FORMAT: "application/json",
+        });
+      if (circle_url) {
+        // console.log("top most url", url);
+        fetch(circle_url)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.features && data.features.length > 0) {
+              for (let index = 0; index < data.features.length; index++) {
+                for (const k in data.features[index].properties) {
+                  if (Object.hasOwn(data.features[index].properties, k)) {
+                    Object.entries(this.grid_labels).forEach(([key, value]) => {
+                      if (key === k) {
+                        console.log(
+                          "%%%%%%%%%%%%",
+                          value,
+                          "&&&&&&&&&&&&&&",
+                          data.features[index].properties[k]
+                        );
+                        this.gridInfo.push(
+                          data.features[index].properties[k],
+                          dms
+                        );
+                        console.log("grid number", this.gridInfo);
                       }
                     });
                   }
@@ -994,7 +1249,7 @@ export default {
       ) {
         this.zoomToCoordinates(coordinates[0], coordinates[1]);
       } else {
-        alert("Please enter valid coordinates in the format: lat, lng");
+        console.log("Please enter valid coordinates in the format: lat, lng");
       }
     },
     zoomToCoordinates(lat, lng) {
@@ -1045,6 +1300,34 @@ export default {
           this.map.getView().fit(vectorSource.getExtent(), this.map.getSize());
         }
       });
+    },
+    displayExtentImage() {
+      if (this.featureExtent) {
+        const extent = this.featureExtent;
+        const projection = this.map.getView().getProjection();
+        const size = [100, 100]; // Desired size of the image
+
+        // Prepare the URL for the GetMap request
+        const baseUrl = "https://solaris-ar.com:8085/geoserver/wms"; // Replace with your GeoServer URL
+        const layerName = this.layers[6].get("name"); // Get the layer name
+        const params = new URLSearchParams({
+          service: "WMS",
+          version: "1.1.1",
+          request: "GetMap",
+          layers: layerName,
+          bbox: extent.join(","), // BBOX in the format 'minX,minY,maxX,maxY'
+          width: size[0],
+          height: size[1],
+          format: "image/png", // Desired image format
+          srs: projection.getCode(), // The projection code
+        });
+
+        // Construct the full URL
+        this.extentImageUrl = `${baseUrl}?${params.toString()}`;
+        console.log("type of url", typeof this.extentImageUrl);
+
+        console.log("Extent Image URL:", this.extentImageUrl);
+      }
     },
   },
 

@@ -25,13 +25,13 @@
                     placeholder="Select Circle"
                     fill="outline"
                     v-model="selectedCircleGid"
-                    @update:modelValue="getGrid(), getVillage()"
+                    @update:modelValue="getGrid(), getVillage(), getWatershed()"
                   >
                     <ion-select-option
                       v-for="circle in circleNamesList"
                       :key="circle.gid"
                       :value="circle.gid"
-                      >{{ circle.cir_name }}</ion-select-option
+                      >{{ circle.aa }}</ion-select-option
                     >
                   </ion-select>
                 </ion-card-content>
@@ -92,11 +92,10 @@
                       placeholder="Select Watershed"
                       fill="outline"
                     >
-                      <ion-select-option value="circle1"
-                        >Circle 1</ion-select-option
-                      >
-                      <ion-select-option value="circle2"
-                        >Circle 2</ion-select-option
+                      <ion-select-option
+                        v-for="watershed in watershedNameList"
+                        :key="watershed.gid"
+                        >{{ watershed.mini_whed }}</ion-select-option
                       >
                     </ion-select>
                   </div>
@@ -144,7 +143,7 @@
                     placeholder="Select Circle"
                     fill="outline"
                     v-model="selectedCircleGid"
-                    @update:modelValue="getGrid(), getVillage()"
+                    @update:modelValue="getGrid(), getVillage(), getWatershed()"
                   >
                     <ion-select-option
                       v-for="circle in circleNamesList"
@@ -212,11 +211,10 @@
                       placeholder="Select Watershed"
                       fill="outline"
                     >
-                      <ion-select-option value="circle1"
-                        >Circle 1</ion-select-option
-                      >
-                      <ion-select-option value="circle2"
-                        >Circle 2</ion-select-option
+                      <ion-select-option
+                        v-for="watershed in watershedNameList"
+                        :key="watershed.gid"
+                        >{{ watershed.mini_whed }}</ion-select-option
                       >
                     </ion-select>
                   </div>
@@ -423,6 +421,7 @@ export default {
       gridNoList: "",
       villageNamesList: "",
       showNamsai: "",
+      watershedNameList: "",
     };
   },
   components: {
@@ -482,7 +481,7 @@ export default {
     async getCircle() {
       try {
         const response = await axios.get(
-          `http://192.168.1.111:3000/api/v1/circle/getcircle`
+          `http://183.82.109.39:3000/api/v1/circle/getcircle`
         );
         this.circleNamesList = response.data;
         console.log("Data:", response.data);
@@ -494,7 +493,7 @@ export default {
       try {
         console.log("selected circle name", this.selectedCircleGid);
         const response = await axios.get(
-          `http://192.168.1.111:3000/api/v1/grid/getGridByCircleGid`,
+          `http://183.82.109.39:3000/api/v1/grid/getGridByCircleGid`,
           {
             params: { query: this.selectedCircleGid },
           }
@@ -509,13 +508,28 @@ export default {
       try {
         console.log("selected circle name", this.selectedCircleGid);
         const response = await axios.get(
-          `http://192.168.1.111:3000/api/v1/village/getVillageByCircleGid`,
+          `http://183.82.109.39:3000/api/v1/village/getVillageByCircleGid`,
           {
             params: { query: this.selectedCircleGid },
           }
         );
         this.villageNamesList = response.data;
         console.log("Data:", this.gridNoList);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    },
+    async getWatershed() {
+      try {
+        console.log("selected circle name", this.selectedCircleGid);
+        const response = await axios.get(
+          `http://183.82.109.39:3000/api/v1/watershed/getwatershed`,
+          {
+            params: { query: this.selectedCircleGid },
+          }
+        );
+        this.watershedNameList = response.data;
+        console.log("Data:", this.watershedNameList);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

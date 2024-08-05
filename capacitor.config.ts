@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.example.myapp',
-  appName: 'myApp',
+  appId: 'com.example.nrimap_v1',
+  appName: 'NRIMAP_V1',
   webDir: 'dist',
   bundledWebRuntime: false,
   server: {

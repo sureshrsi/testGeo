@@ -49,9 +49,16 @@
             @ionInput="handleInput"
           ></ion-searchbar>
           <div slot="end" class="file-upload-container">
-    <input type="file" id="fileInput" ref="fileInput" @change="handleFileKml" />
-    <ion-button slot="end" color="primary" @click="triggerFileInput"><ion-icon name="cloud-upload-outline"></ion-icon></ion-button>
-  </div>
+            <input
+              type="file"
+              id="fileInput"
+              ref="fileInput"
+              @change="handleFileKml"
+            />
+            <ion-button slot="end" color="primary" @click="triggerFileInput"
+              ><ion-icon name="cloud-upload-outline"></ion-icon
+            ></ion-button>
+          </div>
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
@@ -108,6 +115,10 @@ import "ol-layerswitcher/dist/ol-layerswitcher.css";
 import CustomLayerSwitcher from "./CustomLayerSwitcher.vue";
 import SideMenuContent from "./SideMenuContent.vue";
 import FeatureInfo from "./FeatureInfo.vue";
+
+import { KML } from "ol/format";
+import VectorSource from "ol/source/Vector";
+import VectorLayer from "ol/layer/Vector";
 export default {
   data() {
     return {
@@ -179,7 +190,7 @@ export default {
   },
   methods: {
     triggerFileInput() {
-      console.log('Triggering file input...');
+      console.log("Triggering file input...");
       this.$refs.fileInput.click(); // Programmatically click the file input
     },
     handleFileKml(event) {
@@ -984,12 +995,57 @@ export default {
       ) {
         this.zoomToCoordinates(coordinates[0], coordinates[1]);
       } else {
-        alert("Please enter valid coordinates in the format: lat, lng");
+        console.log("Please enter valid coordinates in the format: lat, lng");
       }
     },
     zoomToCoordinates(lat, lng) {
       this.view.setCenter(fromLonLat([lng, lat]));
       this.view.setZoom(10); // Set your desired zoom level
+    },
+    handleFileKml(event) {
+      const file = event.target.files[0];
+      const vm = this; // Store reference to 'this'
+
+      if (file) {
+        const reader = new FileReader();
+        console.log("kml file", file);
+
+        reader.onload = function (e) {
+          const kmlData = e.target.result;
+          console.log("kml data", kmlData);
+          vm.displayKmlOnMap(kmlData); // Use stored reference
+        };
+
+        reader.readAsText(file);
+      }
+    },
+    displayKmlOnMap(kmlData) {
+      let kmlLayer = null;
+      this.map.removeLayer(kmlLayer);
+      const vectorSource = new VectorSource({
+        format: new KML(),
+        url: "data:text/xml;charset=utf-8," + encodeURIComponent(kmlData),
+      });
+      console.log("vector source", vectorSource);
+      kmlLayer = new VectorLayer({
+        source: vectorSource,
+        title: "kml",
+        name: "kml",
+        visible: true,
+      });
+      console.log("kml layer", kmlLayer);
+      this.map.addLayer(kmlLayer);
+
+      // Wait for the vector layer to load before fitting the view
+      // Use an arrow function to maintain the correct context of 'this'
+      vectorSource.once("change", () => {
+        console.log("Layer change event triggered");
+
+        if (vectorSource.getState() === "ready") {
+          console.log("Vector source is ready, fitting the map view");
+          this.map.getView().fit(vectorSource.getExtent(), this.map.getSize());
+        }
+      });
     },
   },
   watch: {
@@ -1033,7 +1089,7 @@ ion-img {
   left: -0.5rem;
   z-index: 99999;
   display: flex;
-  align-items:center;
+  align-items: center;
   flex-grow: 8;
   margin-left: 5px;
 }

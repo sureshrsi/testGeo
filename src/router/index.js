@@ -12,6 +12,7 @@ import GenerateReport from '../components/generateReport.vue';
 import AboutView from '../views/AboutView.vue';
 import FeedbackView from '../views/FeedbackView.vue';
 import ContactView from '../views/ContactView.vue';
+import PdfGenerator from '../components/PdfGenerator.vue';
 
 const routes = [
   {
@@ -46,7 +47,7 @@ const routes = [
   {
   path:'/generatereport',
   name:'generateReport',
-  component:GenerateReport
+  component:PdfGenerator
 },
 {
   path:'/about',

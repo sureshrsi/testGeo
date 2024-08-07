@@ -74,6 +74,8 @@
           :extentImageUrl="extentImageUrl"
           :distCirlce="distCirlce"
           :gridInfo="gridInfo"
+          :soilInfoOne="soilInfoOne"
+          :cropsInfoOne="cropsInfoOne"
           @update:isOpen="isFeatureInfoOpen = $event"
         />
 
@@ -161,6 +163,8 @@ export default {
       showSearchBar: false,
       showSearchbar1: "",
       coordinate: "",
+      soilInfoOne:[],
+      cropsInfoOne:[],
       hgeom_lables: {
         gw_prospec: "Ground Water Prospects",
         lithology: "Lithology",
@@ -960,6 +964,7 @@ export default {
                           "&&&&&&&&&&&&&&",
                           data.features[index].properties[k]
                         );
+                        this.soilInfoOne.push(value + ":" + data.features[index].properties[k]);
                         this.soilInfo.push(data.features[index].properties[k]);
                         console.log("Soil Info", this.soilInfo);
                       }
@@ -1036,6 +1041,7 @@ export default {
                         //   "&&&&&&&&&&&&&&",
                         //   data.features[index].properties[k]
                         // );
+                        this.cropsInfoOne.push(value + ":" + data.features[index].properties[k]);
                         this.cropsInfo.push(data.features[index].properties[k]);
                         console.log("crop suitability", this.cropsInfo);
                       }

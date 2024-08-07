@@ -171,6 +171,7 @@ import {
   IonCard,
   IonText,
   IonGrid,
+  IonFooter,
 } from "@ionic/vue";
 import Logo from "@/assets/img/SOLARISLogo.png";
 import SvgData from "@/assets/img/out3.svg";
@@ -197,6 +198,7 @@ export default {
     IonText,
     IonGrid,
     SVG,
+    IonFooter
   },
   data() {
     return {
@@ -241,9 +243,9 @@ object path:hover {
 }
 
 .arlogo {
-  width: 4rem;
+  width: 3rem;
   height: 3rem;
-  padding-left: 1rem;
+  padding: 0%;
 }
 .rsiLogo {
   width: 12rem;

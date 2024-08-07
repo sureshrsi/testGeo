@@ -119,8 +119,8 @@
       <div v-if="selectedSegment === 'segment4'">
         <ion-card>
           <ion-list>
-            <ion-item v-for="(value, key) in soilInfo" :key="key">
-              {{ value }}
+            <ion-item v-for="(value, key) in soilInfoOne" :key="key">
+             {{ value }}
             </ion-item>
           </ion-list>
           <!-- <ion-col>
@@ -153,7 +153,7 @@
       <div v-if="selectedSegment === 'segment5'">
         <ion-card>
           <ion-list>
-            <ion-item v-for="(value, key) in cropsInfo" :key="key">
+            <ion-item v-for="(value, key) in cropsInfoOne" :key="key">
               {{ value }}
             </ion-item>
           </ion-list>
@@ -216,7 +216,7 @@
         color="primary"
         >Generate Report</ion-button
       >
-      <div v-show="(showDiv = false)">
+      <div v-show="(showDiv = true)">
         <div ref="contentToConvert" class="content-to-convert">
           <div class="report-title-container">
             <img
@@ -517,6 +517,8 @@ export default {
     actionPlanInfo: Object,
     isOpen: Boolean,
     extentImageUrl: String,
+    soilInfoOne:Object,
+    cropsInfoOne:Object
   },
   data() {
     return {

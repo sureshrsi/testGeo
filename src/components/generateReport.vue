@@ -15,15 +15,15 @@
 </ion-row> -->
 <div>
     <ion-row>
-        <ion-col size="2">
+        <ion-col size="1">
         <ion-img src="../src/assets/img/Map_Console_Logo.png"></ion-img>
         </ion-col>
-        <ion-col class="ion-text-center" size="8">
+        <ion-col class="ion-text-center" size="10">
             <!-- <ion-text class="fontSize">Natural Resources Inventory for Micro Level Agricultural Planning</ion-text> -->
             <ion-text class="fontSize ion-padding-top">Arunachal Pradesh Space Application Centre</ion-text><br>
             <ion-text class="fontSizeTwo">Government of Arunachal Pradesh</ion-text>
         </ion-col>
-        <ion-col size="2">
+        <ion-col size="1">
         <ion-img src="../src/assets/img/arplogo.jpg"></ion-img>
         </ion-col>
     </ion-row>

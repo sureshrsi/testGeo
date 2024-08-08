@@ -1,8 +1,10 @@
 <template>
   <ion-page>
     <ion-toolbar>
-      <ion-img class="imgsize" :src="imageSrc" alt="Solaris"></ion-img
-    ></ion-toolbar>
+      <ion-title>
+        <ion-img :src="imageSrc" alt="Solaris" style="height: 7vh"></ion-img>
+      </ion-title>
+    </ion-toolbar>
     <ion-content>
       <ion-card>
         <ion-row>
@@ -243,7 +245,8 @@ object path:hover {
 .arlogo {
   width: 4rem;
   height: 3rem;
-  padding-left: 1rem;
+  left: 0;
+  /* padding-left: 0.2rem; */
 }
 .rsiLogo {
   width: 12rem;

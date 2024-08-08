@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-title
-          ><ion-img src="../src/assets/img/SOLARISLogo.png"> </ion-img
+          ><ion-img :src="HeadLogo" style="height: 5vh"> </ion-img
         ></ion-title>
       </ion-toolbar>
     </ion-header>
@@ -25,7 +25,12 @@
                     placeholder="Select Circle"
                     fill="outline"
                     v-model="selectedCircleGid"
-                    @update:modelValue="getGrid(), getVillage(), getWatershed()"
+                    @update:modelValue="
+                      getGrid(),
+                        getVillage(),
+                        getWatershed(),
+                        onCircleSelected(selectedCircleGid)
+                    "
                   >
                     <ion-select-option
                       v-for="circle in circleNamesList"
@@ -59,10 +64,13 @@
                       label-placement="floating"
                       placeholder="Select Grid No"
                       fill="outline"
+                      v-model="selectedGridGid"
+                      @update:modelValue="onCircleSelected(selectedGridGid)"
                     >
                       <ion-select-option
                         v-for="grid in gridNoList"
                         :key="grid.gid"
+                        :value="grid.gid"
                         >{{ grid.grid_no }}</ion-select-option
                       >
                     </ion-select>
@@ -75,10 +83,13 @@
                       label-placement="floating"
                       placeholder="Select Village"
                       fill="outline"
+                      v-model="selectedVillageGid"
+                      @update:modelValue="onCircleSelected(selectedVillageGid)"
                     >
                       <ion-select-option
                         v-for="village in villageNamesList"
                         :key="village.gid"
+                        :value="village.gid"
                         >{{ village.name }}</ion-select-option
                       >
                     </ion-select>
@@ -91,10 +102,15 @@
                       label-placement="floating"
                       placeholder="Select Watershed"
                       fill="outline"
+                      v-model="selectedWatershedGid"
+                      @update:modelValue="
+                        onCircleSelected(selectedWatershedGid)
+                      "
                     >
                       <ion-select-option
                         v-for="watershed in watershedNameList"
                         :key="watershed.gid"
+                        :value="watershed.gid"
                         >{{ watershed.mini_whed }}</ion-select-option
                       >
                     </ion-select>
@@ -405,6 +421,7 @@ import {
   IonCol,
   IonCardContent,
 } from "@ionic/vue";
+import Logo from "@/assets/img/SOLARISLogo.png";
 import { useRoute } from "vue-router";
 import axios from "axios";
 // import { getGridDetails } from "../services/sideMenuApi";
@@ -412,6 +429,7 @@ export default {
   props: {
     layers: Array,
     legendUrl: String,
+    callMethod: Function,
   },
   data() {
     return {
@@ -419,9 +437,13 @@ export default {
       circleNamesList: "",
       selectedCircleGid: "",
       gridNoList: "",
+      selectedGridGid: "",
       villageNamesList: "",
+      selectedVillageGid: "",
       showNamsai: "",
       watershedNameList: "",
+      selectedWatershedGid: "",
+      HeadLogo: Logo,
     };
   },
   components: {
@@ -514,7 +536,7 @@ export default {
           }
         );
         this.villageNamesList = response.data;
-        console.log("Data:", this.gridNoList);
+        console.log("Data:", this.villageNamesList);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -532,6 +554,128 @@ export default {
         console.log("Data:", this.watershedNameList);
       } catch (error) {
         console.error("Error fetching data:", error);
+      }
+    },
+
+    async onCircleSelected(selectedGid) {
+      const selectedCircle = this.circleNamesList.find(
+        (circle) => circle.gid === selectedGid
+      );
+      const selectedGridExtent = this.gridNoList.find(
+        (grid) => grid.gid === selectedGid
+      );
+      const selectedVillageExtent = this.villageNamesList.find(
+        (village) => village.gid === selectedGid
+      );
+      const selectedWatershedExtent = this.watershedNameList.find(
+        (watershed) => watershed.gid === selectedGid
+      );
+      selectedWatershedExtent;
+
+      if (selectedCircle) {
+        console.log("selected circle", selectedCircle);
+        // Access the extent from the selectedCircle
+        const extentString = selectedCircle.extent;
+
+        // Use a regular expression to extract the coordinates
+        const regex = /BOX\(([^,]+),([^)]+)\)/;
+        const matches = regex.exec(extentString);
+        console.log("matches", matches);
+        if (matches) {
+          const minCoords = matches[1].trim().split(" ").map(Number); // [minX, minY]
+          const maxCoords = matches[2].trim().split(" ").map(Number); // [maxX, maxY]
+
+          // Create an array of coordinates for fitting the map view
+          const extent = [
+            minCoords[0],
+            minCoords[1],
+            maxCoords[0],
+            maxCoords[1],
+          ];
+          console.log("extent", extent);
+          // Use the extent to fit the map view
+          // this.view.fit(extent, { duration: 1000 });
+
+          this.callMethod(extent);
+        }
+      } else if (selectedGridExtent) {
+        console.log("selected circle", selectedGridExtent);
+        // Access the extent from the selectedCircle
+        const extentString = selectedGridExtent.extent;
+
+        // Use a regular expression to extract the coordinates
+        const regex = /BOX\(([^,]+),([^)]+)\)/;
+        const matches = regex.exec(extentString);
+        console.log("matches", matches);
+        if (matches) {
+          const minCoords = matches[1].trim().split(" ").map(Number); // [minX, minY]
+          const maxCoords = matches[2].trim().split(" ").map(Number); // [maxX, maxY]
+
+          // Create an array of coordinates for fitting the map view
+          const extent = [
+            minCoords[0],
+            minCoords[1],
+            maxCoords[0],
+            maxCoords[1],
+          ];
+          console.log("extent", extent);
+          // Use the extent to fit the map view
+          // this.view.fit(extent, { duration: 1000 });
+
+          this.callMethod(extent);
+        }
+      } else if (selectedVillageExtent) {
+        console.log("selected circle", selectedVillageExtent);
+        // Access the extent from the selectedCircle
+        const extentString = selectedVillageExtent.extent;
+
+        // Use a regular expression to extract the coordinates
+        const regex = /BOX\(([^,]+),([^)]+)\)/;
+        const matches = regex.exec(extentString);
+        console.log("matches", matches);
+        if (matches) {
+          const minCoords = matches[1].trim().split(" ").map(Number); // [minX, minY]
+          const maxCoords = matches[2].trim().split(" ").map(Number); // [maxX, maxY]
+
+          // Create an array of coordinates for fitting the map view
+          const extent = [
+            minCoords[0],
+            minCoords[1],
+            maxCoords[0],
+            maxCoords[1],
+          ];
+          console.log("extent", extent);
+          // Use the extent to fit the map view
+          // this.view.fit(extent, { duration: 1000 });
+
+          this.callMethod(extent);
+        }
+      } else if (selectedWatershedExtent) {
+        console.log("selected circle", selectedWatershedExtent);
+        // Access the extent from the selectedCircle
+        const extentString = selectedWatershedExtent.extent;
+
+        // Use a regular expression to extract the coordinates
+        const regex = /BOX\(([^,]+),([^)]+)\)/;
+        const matches = regex.exec(extentString);
+        console.log("matches", matches);
+        if (matches) {
+          const minCoords = matches[1].trim().split(" ").map(Number); // [minX, minY]
+          const maxCoords = matches[2].trim().split(" ").map(Number); // [maxX, maxY]
+
+          // Create an array of coordinates for fitting the map view
+          const extent = [
+            minCoords[0],
+            minCoords[1],
+            maxCoords[0],
+            maxCoords[1],
+          ];
+          console.log("extent", extent);
+          // Use the extent to fit the map view
+          // this.view.fit(extent, { duration: 1000 });
+
+          this.callMethod(extent);
+        }
       }
     },
   },

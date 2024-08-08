@@ -1,15 +1,10 @@
 <template>
-  <div v-if="featureInfo" class="feature-info">
+  <div v-if="lulcInfo" class="feature-info">
     <ion-content>
       <div>
         <ion-grid>
           <ion-row>
-            <ion-segment
-              v-model="selectedSegment"
-              mode="ios"
-              :scrollable="true"
-              :swipe-gesture="true"
-            >
+            <ion-segment v-model="selectedSegment" mode="ios">
               <ion-segment-button value="segment1">
                 <ion-label>LULC</ion-label>
               </ion-segment-button>
@@ -22,84 +17,59 @@
               <ion-segment-button value="segment4">
                 <ion-label>SOIL</ion-label>
               </ion-segment-button>
-              <ion-segment-button value="segment5">
+              <!-- <ion-segment-button value="segment5">
                 <ion-label>CROPS</ion-label>
               </ion-segment-button>
               <ion-segment-button value="segment6">
                 <ion-label>APLAN</ion-label>
-              </ion-segment-button>
+              </ion-segment-button> -->
             </ion-segment>
           </ion-row>
         </ion-grid>
       </div>
       <div v-if="selectedSegment === 'segment1'">
         <ion-card>
-          <ion-list>
-            <ion-item v-for="(value, key) in featureInfo" :key="key">
-              {{ value }}
-            </ion-item>
-          </ion-list>
+          <ion-card-title>Land Use Land Cover</ion-card-title>
+          <div
+            v-for="info in lulcInfo"
+            v-html="info"
+            :key="info"
+            style="color: black; padding: 5px; background-color: #ffffff"
+          ></div>
         </ion-card>
-        <!-- <ion-col v-for="(value, key) in featureInfo" :key="key">
-                <ion-text
-                  ><strong>{{ key }} </strong></ion-text
-                ><br />
-                <ion-text
-                  ><strong> {{ value }} </strong></ion-text
-                >
-              </ion-col> -->
-        <!-- <ion-col>
-                <ion-text><strong>Land use Land Cover : </strong></ion-text>
-              </ion-col>
-              <ion-col>
-                <ion-text>Closed Forest</ion-text>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col>
-                <ion-text><strong>Area(Ha) : </strong></ion-text>
-              </ion-col>
-              <ion-col>
-                <ion-text>15614561</ion-text>
-              </ion-col> -->
       </div>
 
       <div v-if="selectedSegment === 'segment2'">
         <ion-card>
-          <ion-list>
+          <ion-card-title>Hydrogeomorphology</ion-card-title>
+          <div
+            v-for="info in heomInfo"
+            v-html="info"
+            :key="info"
+            style="color: black; padding: 5px; background-color: #ffffff"
+          ></div>
+          <!-- <ion-list>
             <ion-item v-for="(value, key) in heomInfo" :key="key">
               {{ value }}
             </ion-item>
           </ion-list>
-          <!-- <ion-col>
-                <ion-text><strong>Geom Unit : </strong></ion-text>
-              </ion-col>
-              <ion-col>
-                <ion-text>Hill Slopes</ion-text>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col>
-                <ion-text><strong>Lithology : </strong></ion-text>
-              </ion-col>
-              <ion-col>
-                <ion-text>Kyanite,Garnet,Muscovite,Biotite Schist</ion-text>
-              </ion-col>
-              <ion-col>
-                <ion-text><strong>Ground water Prospects : </strong></ion-text>
-              </ion-col>
-              <ion-col>
-                <ion-text>Poor to Moderate</ion-text>
-              </ion-col> -->
+         -->
         </ion-card>
       </div>
       <div v-if="selectedSegment === 'segment3'">
         <ion-card>
-          <ion-list>
+          <ion-card-title>Slope Information</ion-card-title>
+          <div
+            v-for="info in slopeInfo"
+            v-html="info"
+            :key="info"
+            style="color: black; padding: 5px; background-color: #ffffff"
+          ></div>
+          <!-- <ion-list>
             <ion-item v-for="(value, key) in slopeInfo" :key="key">
               {{ value }}
             </ion-item>
-          </ion-list>
+          </ion-list> -->
           <!-- <ion-col>
                 <ion-text><strong>Slope Percentage : </strong></ion-text>
               </ion-col>
@@ -118,11 +88,24 @@
       </div>
       <div v-if="selectedSegment === 'segment4'">
         <ion-card>
-          <ion-list>
-            <ion-item v-for="(value, key) in soilInfo" :key="key">
-              {{ value }}
-            </ion-item>
-          </ion-list>
+          <ion-card-title>Soil Information</ion-card-title>
+          <div
+            v-html="soilInfoUI[1]"
+            style="color: black; padding: 5px; background-color: #ffffff"
+          ></div>
+          <div
+            v-html="soilInfoUI[3]"
+            style="color: black; padding: 5px; background-color: #ffffff"
+          ></div>
+          <div
+            v-html="soilInfoUI[4]"
+            style="color: black; padding: 5px; background-color: #ffffff"
+          ></div>
+          <!-- <ion-list>
+            <ion-item>{{ soilInfoUI[1] }}</ion-item>
+            <ion-item>{{ soilInfoUI[3] }}</ion-item>
+            <ion-item>{{ soilInfoUI[4] }}</ion-item>
+          </ion-list> -->
           <!-- <ion-col>
                 <ion-text><strong>Mapping Unit : </strong></ion-text>
               </ion-col>
@@ -150,7 +133,7 @@
               </ion-col> -->
         </ion-card>
       </div>
-      <div v-if="selectedSegment === 'segment5'">
+      <!-- <div v-if="selectedSegment === 'segment5'">
         <ion-card>
           <ion-list>
             <ion-item v-for="(value, key) in cropsInfo" :key="key">
@@ -158,36 +141,9 @@
             </ion-item>
           </ion-list>
         </ion-card>
-        <!-- <ion-col>
-                <ion-text
-                  ><strong>Highly Suitable Crops(s1): </strong></ion-text
-                >
-              </ion-col>
-              <ion-col>
-                <ion-text>SC230</ion-text>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col>
-                <ion-text
-                  ><strong>Moderately Suitable Crops(s2) : </strong></ion-text
-                >
-              </ion-col>
-              <ion-col>
-                <ion-text>-</ion-text>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col>
-                <ion-text
-                  ><strong>Marginally suitable Crops(s3) : </strong></ion-text
-                >
-              </ion-col>
-              <ion-col>
-                <ion-text>Paddy,Kiwi</ion-text>
-              </ion-col> -->
-      </div>
-      <div v-if="selectedSegment === 'segment6'">
+        
+      </div> -->
+      <!-- <div v-if="selectedSegment === 'segment6'">
         <ion-card>
           <ion-list>
             <ion-item v-for="(value, key) in actionPlanInfo" :key="key">
@@ -195,27 +151,25 @@
             </ion-item>
           </ion-list>
         </ion-card>
-        <!-- <ion-text
-                ><strong
-                  >Action Plan for Resources Development :
-                </strong></ion-text
-              >
-            </ion-row>
-            <ion-row class="ion-padding ion-text-justify">
-              <ion-text
-                >Construction of run off disposal channels in the cultivated
-                land; application of 8.00 tonnes/ha of lime and application of
-                N, K, Cu, B & Mo</ion-text
-              > -->
+      </div> -->
+      <ion-card>
+        <ion-card-title>Generate Report</ion-card-title>
+        <ion-button
+          expand="block"
+          size="small"
+          @click="generateReportPage"
+          class="ion-margin"
+          color="primary"
+          >Crop Suitability / Action Plan</ion-button
+        >
+      </ion-card>
+
+      <div v-if="loading" class="loading-indicator">
+        Generating PDF, please wait...
+        <div class="spinner"></div>
+        <!-- You can style this spinner with CSS -->
       </div>
-      <ion-button
-        expand="block"
-        size="small"
-        @click="generateReportPage"
-        class="ion-margin"
-        color="primary"
-        >Generate Report</ion-button
-      >
+
       <div v-show="(showDiv = false)">
         <div ref="contentToConvert" class="content-to-convert">
           <div class="report-title-container">
@@ -499,6 +453,7 @@ import {
   IonButton,
   IonList,
   IonItem,
+  IonCardTitle,
 } from "@ionic/vue";
 import html2pdf from "html2pdf.js";
 import arLogo from "@/assets/img/ArLogo.png";
@@ -509,10 +464,11 @@ export default {
   props: {
     distCirlce: Object,
     gridInfo: Object,
-    featureInfo: Object,
+    lulcInfo: Object,
     heomInfo: Object,
     slopeInfo: Object,
     soilInfo: Object,
+    soilInfoUI: Object,
     cropsInfo: Object,
     actionPlanInfo: Object,
     isOpen: Boolean,
@@ -524,6 +480,7 @@ export default {
       imgLogo: arLogo,
       mapLogo: cropLogo,
       selectedImage: this.extentImageUrl,
+      loading: false, // Add loading state
     };
   },
   components: {
@@ -534,6 +491,7 @@ export default {
     IonSegmentButton,
     IonLabel,
     IonCard,
+    IonCardTitle,
     IonList,
     IonItem,
   },
@@ -566,7 +524,15 @@ export default {
       });
     },
     async generateReportPage() {
+      this.loading = true; // Set loading to true
       try {
+        // Generate a date-only timestamp in the format YYYYMMDD
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+        const day = String(date.getDate()).padStart(2, "0");
+        const dateStamp = `${day}${month}${year}`;
+        const pdfName = this.soilInfo[0] + dateStamp + ".pdf";
         const imageUrl = this.extentImageUrl;
         const base64Image = await this.getBase64Image(imageUrl);
 
@@ -576,7 +542,7 @@ export default {
 
         const options = {
           margin: 0.5,
-          filename: "table.pdf",
+          filename: pdfName,
           image: { type: "png", quality: 0.98 },
           html2canvas: { scale: 2 },
           jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
@@ -589,7 +555,7 @@ export default {
         const base64String = pdfContent.split(",")[1];
 
         await Filesystem.writeFile({
-          path: "table.pdf",
+          path: pdfName,
           data: base64String,
           directory: Directory.Documents,
           encoding: Encoding.Base64,
@@ -598,6 +564,8 @@ export default {
         alert("PDF saved successfully! Check your documents folder.");
       } catch (error) {
         console.error("Error generating PDF: ", error);
+      } finally {
+        this.loading = false; // Set loading to false after process
       }
     },
     // generateReportPage() {
@@ -621,8 +589,8 @@ export default {
   bottom: 0;
   min-width: 95%;
   height: 30%;
-  overflow-y: scroll;
-  background-color: rgb(205, 204, 204);
+  /* overflow-y: scroll; */
+  background-color: rgb(255, 255, 255);
   z-index: 999; /* Ensure it appears above other elements */
   border-top: 1px solid #3c457c;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
@@ -630,10 +598,17 @@ export default {
 ion-card {
   overflow-y: scroll;
   overflow-x: scroll;
-  /* background-color: #3C457C; */
-  color: #a1a0a5;
-  border-radius: 1rem;
+  background-color: #ffffff;
+  color: #ffffff;
+  border-radius: 0.5rem;
   box-shadow: 1px 1px 6px rgb(96, 96, 161);
+
+  padding-top: 10px;
+}
+ion-card-title {
+  color: #0f0e47;
+  text-align: center;
+  background-color: #ffffff;
 }
 .contentBgColor {
   background-color: #3c457c;
@@ -690,5 +665,36 @@ th {
   background-color: white;
   font-size: 12px;
   border-top: 1px solid #ccc;
+}
+
+.loading-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure it's above other elements */
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid #3498db;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

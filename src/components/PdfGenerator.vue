@@ -254,7 +254,6 @@ export default {
     return {
       imgLogo: arLogo,
       mapLogo: cropLogo,
-      pdfdata: null,
     };
   },
   components: {

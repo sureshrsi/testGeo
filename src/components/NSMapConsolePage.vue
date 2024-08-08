@@ -3,6 +3,7 @@
     <SideMenuContent
       :layers="layers"
       :legendUrl="legendUrl"
+      :callMethod="parentMethodCall"
       @layer-toggled="updateLegend"
     />
     <!-- <ion-menu content-id="main-content">
@@ -23,9 +24,19 @@
           <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
           </ion-buttons>
-          <ion-buttons slot="start">
-            <ion-back-button default-href="/main" text="" />
-          </ion-buttons>
+          <!-- <ion-buttons slot="start">
+            <ion-back-button default-href="/main" text="">
+              <ion-icon slot="icon-only" name="home"></ion-icon>
+            </ion-back-button>
+          </ion-buttons> -->
+          <ion-button
+            slot="start"
+            color="primary"
+            class="iom-padding"
+            @click="goHome"
+          >
+            <ion-icon slot="icon-only" name="home"></ion-icon>
+          </ion-button>
           <ion-title>
             <ion-img :src="imageSrc" class="imgPadding"> </ion-img>
           </ion-title>
@@ -65,10 +76,11 @@
       <ion-content class="ion-padding">
         <div id="map" class="map"></div>
         <FeatureInfo
-          :featureInfo="featureInfo"
+          :lulcInfo="lulcInfo"
           :heomInfo="heomInfo"
           :slopeInfo="slopeInfo"
           :soilInfo="soilInfo"
+          :soilInfoUI="soilInfoUI"
           :cropsInfo="cropsInfo"
           :actionPlanInfo="actionPlanInfo"
           :extentImageUrl="extentImageUrl"
@@ -151,10 +163,11 @@ export default {
       overlay: null,
       distCirlce: [],
       gridInfo: [],
-      featureInfo: [],
+      lulcInfo: [],
       heomInfo: [],
       slopeInfo: [],
       soilInfo: [],
+      soilInfoUI: [],
       cropsInfo: [],
       actionPlanInfo: [],
       legendUrl: null,
@@ -204,7 +217,7 @@ export default {
       },
       lulc_lables: {
         lulc: "Land Use Land Cover",
-        area_lulc: "Area (Ha)",
+        area_ha: "Area (Ha)",
       },
       slope_lables: {
         slope_perc: "Slope Percentage",
@@ -317,7 +330,7 @@ export default {
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "NEW_APWS:namsai_crop_suitability5",
+            LAYERS: "NEW_APWS:namsai_crop_suitability",
             TILED: true,
           },
           serverType: "geoserver",
@@ -328,12 +341,12 @@ export default {
 
       const ActionPlaneLayer = new TileLayer({
         title: "Action Plan",
-        name: "namsai_action_plan_land_water",
+        name: "namsai_action plan",
         visible: false,
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "NEW_APWS:namsai_action_plan_land_water",
+            LAYERS: "NEW_APWS:namsai_action plan",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -373,6 +386,21 @@ export default {
           transition: 0,
         }),
       });
+      const LandIrrigabilityLayer = new TileLayer({
+        title: "Land Irrigability",
+        name: "namsai_land_irrigability",
+        visible: false,
+        source: new TileWMS({
+          url: base_url + "/wms", // Replace with your GeoServer WMS URL
+          params: {
+            LAYERS: "NEW_APWS:namsai_land_irrigability",
+            TILED: true,
+          },
+          crossOrigin: "anonymous", // Ensure this is set for CORS
+          serverType: "geoserver",
+          transition: 0,
+        }),
+      });
       const LandDegradationLayer = new TileLayer({
         title: "Land Degradation",
         name: "namsai_land_degradation",
@@ -390,12 +418,12 @@ export default {
       });
       const SoilInfoLayer = new TileLayer({
         title: "Soil Information",
-        name: "namsai_final_soil_soft5",
+        name: "namsai_soil soft",
         visible: false,
         source: new TileWMS({
           url: base_url + "/wms", // Replace with your GeoServer WMS URL
           params: {
-            LAYERS: "NEW_APWS:namsai_final_soil_soft5",
+            LAYERS: "NEW_APWS:namsai_soil soft",
             TILED: true,
           },
           crossOrigin: "anonymous", // Ensure this is set for CORS
@@ -484,7 +512,7 @@ export default {
       });
 
       const DrainPLayer = new TileLayer({
-        title: "DrainP",
+        title: "Drainage Poly",
         name: "namsai_drainp",
         visible: false,
         source: new TileWMS({
@@ -500,7 +528,7 @@ export default {
       });
 
       const DrainLLayer = new TileLayer({
-        title: "DrainL",
+        title: "Drainage Line",
         name: "namsai_drainl_new",
         visible: false,
         source: new TileWMS({
@@ -551,10 +579,10 @@ export default {
         title: "All Layers",
         layers: [
           baseLayer,
-          gridLayer,
           ActionPlaneLayer,
           CropSuitabilityLayer,
           LandCapLayer,
+          LandIrrigabilityLayer,
           LandDegradationLayer,
           SoilInfoLayer,
           HgeomLayer,
@@ -565,6 +593,7 @@ export default {
           DrainPLayer,
           DrainLLayer,
           BasemapLayer,
+          gridLayer,
           CircleLayer,
         ],
       });
@@ -605,10 +634,10 @@ export default {
       // Save the layers to data for passing to the custom layer switcher
       this.layers = [
         baseLayer,
-        gridLayer,
         ActionPlaneLayer,
         CropSuitabilityLayer,
         LandCapLayer,
+        LandIrrigabilityLayer,
         LandDegradationLayer,
         SoilInfoLayer,
         HgeomLayer,
@@ -620,6 +649,7 @@ export default {
         DrainLLayer,
         BasemapLayer,
         CircleLayer,
+        gridLayer,
       ];
 
       // Add click event listener to the map
@@ -696,6 +726,7 @@ export default {
       const viewResolution = view.getResolution();
       const projection = view.getProjection();
       this.coordinate = event.coordinate;
+      console.log("cccccooooodddddnnnnnaaatteeeessss", this.coordinate);
 
       // Clear existing markers
       this.markerLayer.getSource().clear();
@@ -752,11 +783,11 @@ export default {
       }
     },
     getLulcData(event) {
-      this.featureInfo = [];
+      this.lulcInfo = [];
       const view = this.map.getView();
       const viewResolution = view.getResolution();
       const projection = view.getProjection();
-      this.coordinate = event.coordinate;
+      // this.coordinate = event.coordinate;
       const lulc_url = this.layers[10]
         .getSource()
         .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
@@ -779,12 +810,12 @@ export default {
                           "&&&&&&&&&&&&&&",
                           data.features[index].properties[k]
                         );
-                        this.featureInfo.push(
-                          value + " : " + data.features[index].properties[k]
+                        this.lulcInfo.push(
+                          `<strong>${value}</strong> : ${data.features[index].properties[k]}`
                         );
                         console.log(
                           "%%%%%%%%%%%%%%%%%#@@#@#@@@#%%%%%%%%%%%%%%%%%%%%%",
-                          this.featureInfo
+                          this.lulcInfo
                         );
                       }
                     });
@@ -815,7 +846,7 @@ export default {
       const view = this.map.getView();
       const viewResolution = view.getResolution();
       const projection = view.getProjection();
-      this.coordinate = event.coordinate;
+      // this.coordinate = event.coordinate;
       const heom_url = this.layers[7]
         .getSource()
         .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
@@ -840,11 +871,11 @@ export default {
                             data.features[index].properties[k]
                           );
                           this.heomInfo.push(
-                            value + " : " + data.features[index].properties[k]
+                            `<strong>${value}</strong> : ${data.features[index].properties[k]}`
                           );
                           console.log(
                             "%%%%%%%%%%%%%%%%%#@@#@#@@@#%%%%%%%%%%%%%%%%%%%%%",
-                            this.featureInfo
+                            this.heomInfo
                           );
                         }
                       }
@@ -876,7 +907,7 @@ export default {
       const view = this.map.getView();
       const viewResolution = view.getResolution();
       const projection = view.getProjection();
-      this.coordinate = event.coordinate;
+      // this.coordinate = event.coordinate;
       const slop_url = this.layers[9]
         .getSource()
         .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
@@ -901,7 +932,7 @@ export default {
                             data.features[index].properties[k]
                           );
                           this.slopeInfo.push(
-                            value + " : " + data.features[index].properties[k]
+                            `<strong>${value}</strong> : ${data.features[index].properties[k]}`
                           );
                           console.log(
                             "%%%%%%%%%%%%%%%%%#@@#@#@@@#%%%%%%%%%%%%%%%%%%%%%",
@@ -934,10 +965,11 @@ export default {
     },
     getSoilData(event) {
       this.soilInfo = [];
+      this.soilInfoUI = [];
       const view = this.map.getView();
       const viewResolution = view.getResolution();
       const projection = view.getProjection();
-      this.coordinate = event.coordinate;
+      // this.coordinate = event.coordinate;
       const soil_url = this.layers[6]
         .getSource()
         .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
@@ -959,6 +991,9 @@ export default {
                           value,
                           "&&&&&&&&&&&&&&",
                           data.features[index].properties[k]
+                        );
+                        this.soilInfoUI.push(
+                          `<strong>${value}</strong> : ${data.features[index].properties[k]}`
                         );
                         this.soilInfo.push(data.features[index].properties[k]);
                         console.log("Soil Info", this.soilInfo);
@@ -1014,7 +1049,7 @@ export default {
       const viewResolution = view.getResolution();
       const projection = view.getProjection();
       this.coordinate = event.coordinate;
-      const crops_url = this.layers[3]
+      const crops_url = this.layers[2]
         .getSource()
         .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
           INFO_FORMAT: "application/json",
@@ -1068,7 +1103,7 @@ export default {
       const viewResolution = view.getResolution();
       const projection = view.getProjection();
       this.coordinate = event.coordinate;
-      const action_url = this.layers[2]
+      const action_url = this.layers[1]
         .getSource()
         .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
           INFO_FORMAT: "application/json",
@@ -1184,9 +1219,9 @@ export default {
       const view = this.map.getView();
       const viewResolution = view.getResolution();
       const projection = view.getProjection();
-      this.coordinate = event.coordinate;
+      // this.coordinate = event.coordinate;
       let dms = toStringHDMS(this.coordinate, 5);
-      const circle_url = this.layers[1]
+      const circle_url = this.layers[16]
         .getSource()
         .getFeatureInfoUrl(this.coordinate, viewResolution, projection, {
           INFO_FORMAT: "application/json",
@@ -1328,6 +1363,15 @@ export default {
 
         console.log("Extent Image URL:", this.extentImageUrl);
       }
+    },
+
+    parentMethodCall(extent) {
+      this.view.fit(extent, { duration: 1000 });
+      this.view.setCenter(fromLonLat(extent));
+      this.view.setZoom(12); // Set your desired zoom level
+    },
+    goHome() {
+      this.$router.push("/main"); // Use Vue Router to navigate to the main route
     },
   },
 
